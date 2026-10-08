@@ -1,6 +1,23 @@
-import { createSession, passwordHash, sessionCookie, validPassword, validUsername } from "@/lib/auth-server";
-import { jsonError, newToken, requireStorage } from "@/lib/cabinet-server";
+import { createSession, passwordHash, sameOrigin, sessionCookie, validPassword, validUsername } from "@/lib/auth-server";
+import { jsonError, requireStorage } from "@/lib/cabinet-server";
 
 export async function POST(request: Request) {
-  try { const payload = await request.json() as { username?: unknown; password?: unknown }; if (!validUsername(payload.username)) return jsonError("账号需为 3–32 位中文、字母、数字、下划线或短横线。"); if (!validPassword(payload.password)) return jsonError("密码长度需为 6–128 位。"); const username = payload.username as string; const password = payload.password as string; const { db } = requireStorage(); let user = await db.prepare("SELECT id, username, password_salt, password_hash FROM users WHERE username = ? LIMIT 1").bind(username).first<{ id: string; username: string; password_salt: string; password_hash: string }>(); let created = false; if (!user) { const now = new Date().toISOString(); user = { id: crypto.randomUUID(), username, password_salt: newToken(), password_hash: "" }; user.password_hash = await passwordHash(password, user.password_salt); await db.prepare("INSERT INTO users (id, username, password_salt, password_hash, created_at) VALUES (?, ?, ?, ?, ?)").bind(user.id, user.username, user.password_salt, user.password_hash, now).run(); created = true; } else if ((await passwordHash(password, user.password_salt)) !== user.password_hash) return jsonError("账号或密码不正确。", 401); const session = await createSession(user.id); return Response.json({ user: { id: user.id, username: user.username }, created }, { headers: { "Set-Cookie": sessionCookie(session.token) } }); } catch (error) { console.error(error); return jsonError("登录失败，请稍后重试。", 500); }
+  if (!sameOrigin(request)) return jsonError("请求来源无效。", 403);
+  try {
+    const payload = await request.json() as { username?: unknown; password?: unknown };
+    if (!validUsername(payload.username) || !validPassword(payload.password)) return jsonError("账号或密码不正确。", 401);
+    const username = payload.username as string; const password = payload.password as string;
+    const { db } = requireStorage(); const now = new Date().toISOString();
+    const attempts = await db.prepare("SELECT attempts, window_started_at FROM login_attempts WHERE username = ?").bind(username).first<{ attempts: number; window_started_at: string }>();
+    if (attempts && Date.now() - Date.parse(attempts.window_started_at) < 900_000 && attempts.attempts >= 5) return jsonError("登录尝试过多，请 15 分钟后再试。", 429);
+    const user = await db.prepare("SELECT id, username, email, password_salt, password_hash FROM users WHERE username = ? LIMIT 1").bind(username).first<{ id: string; username: string; email: string | null; password_salt: string | null; password_hash: string | null }>();
+    if (!user?.password_salt || !user.password_hash || (await passwordHash(password, user.password_salt)) !== user.password_hash) {
+      if (!attempts || Date.now() - Date.parse(attempts.window_started_at) >= 900_000) await db.prepare("INSERT INTO login_attempts (username, attempts, window_started_at) VALUES (?, 1, ?) ON CONFLICT(username) DO UPDATE SET attempts = 1, window_started_at = excluded.window_started_at").bind(username, now).run();
+      else await db.prepare("UPDATE login_attempts SET attempts = attempts + 1 WHERE username = ?").bind(username).run();
+      return jsonError("账号或密码不正确。", 401);
+    }
+    await db.prepare("DELETE FROM login_attempts WHERE username = ?").bind(username).run();
+    const session = await createSession(user.id);
+    return Response.json({ user: { id: user.id, username: user.username, email: user.email } }, { headers: { "Set-Cookie": sessionCookie(session.token, request) } });
+  } catch (error) { console.error(error); return jsonError("登录失败，请稍后重试。", 500); }
 }

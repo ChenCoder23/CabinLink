@@ -1,7 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Archive, ArrowRight, LoaderCircle } from "lucide-react";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { CabinetOverview } from "@/components/cabinet-overview";
 
-type Cabinet = { id: string; name: string; created_at: string; closed_at: string | null; theme_count: number };
-export default function MyCabinets() { const [cabinets, setCabinets] = useState<Cabinet[] | null>(null); const [error, setError] = useState(""); useEffect(() => { void fetch("/api/auth/cabinets").then(async (response) => { const body = await response.json(); if (!response.ok) throw new Error(body.error); setCabinets(body.cabinets); }).catch((reason) => setError(reason instanceof Error ? reason.message : "读取失败")); }, []); if (!cabinets && !error) return <main className="grid min-h-screen place-items-center bg-[#eef4f3]"><LoaderCircle className="size-7 animate-spin text-[#17836d]" /></main>; if (error) return <main className="grid min-h-screen place-items-center bg-[#eef4f3] px-5"><div className="rounded-3xl bg-white p-8 text-center"><h1 className="text-2xl font-bold">请先登录账号</h1><a href="/" className="mt-5 inline-block rounded-xl bg-[#123047] px-4 py-2.5 font-semibold text-white">返回首页登录</a></div></main>; return <main className="min-h-screen bg-[#eef4f3] text-[#123047]"><div className="mx-auto max-w-5xl px-5 py-8 sm:px-8"><header className="flex items-center justify-between"><a href="/" className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-xl bg-[#123047] text-white"><Archive className="size-5" /></span><span><b className="block">柜联</b><small className="text-[#668087]">我的智能柜</small></span></a><a href="/" className="rounded-xl border border-[#c7d8d6] bg-white px-3 py-2 text-sm font-semibold">创建智能柜</a></header><section className="mt-12"><p className="text-sm text-[#67828a]">登录账号创建的空间</p><h1 className="mt-1 text-4xl font-extrabold">我的智能柜</h1>{cabinets.length ? <div className="mt-7 grid gap-4 sm:grid-cols-2">{cabinets.map((cabinet) => <a key={cabinet.id} href={`/my/cabinets/${cabinet.id}`} className="rounded-3xl border border-[#cfe0dd] bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"><p className="text-sm text-[#67828a]">{cabinet.closed_at ? "已关闭" : `${cabinet.theme_count} 个主题`}</p><h2 className="mt-2 text-xl font-bold">{cabinet.name}</h2><p className="mt-2 text-sm text-[#728b91]">创建于 {new Date(cabinet.created_at).toLocaleDateString("zh-CN")}</p><span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-[#17836d]">查看与管理 <ArrowRight className="size-4" /></span></a>)}</div> : <div className="mt-7 rounded-3xl border border-dashed border-[#c5d9d5] bg-white/70 p-12 text-center"><h2 className="text-lg font-bold">还没有智能柜</h2><p className="mt-2 text-[#718a90]">在登录状态下创建的智能柜会出现在这里。</p><a href="/" className="mt-5 inline-block rounded-xl bg-[#123047] px-4 py-2.5 font-semibold text-white">去创建</a></div>}</section></div></main>; }
+export default function MyCabinets() {
+  return <main className="min-h-screen bg-[#f5f8f7] text-[#193440]"><div className="mx-auto max-w-xl px-5 pb-12 pt-7 sm:pt-12">
+    <Link href="/" className="inline-flex min-h-10 items-center gap-2 text-sm font-medium text-[#667f82]"><ArrowLeft className="size-4" />返回首页</Link>
+    <h1 className="mt-7 text-2xl font-bold">我的智能柜</h1>
+    <CabinetOverview />
+  </div></main>;
+}

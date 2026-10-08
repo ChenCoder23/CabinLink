@@ -1,27 +1,119 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Archive, ArrowRight, Copy, Link2, LockKeyhole, LogIn, Plus, Upload, UserRound } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Archive, ArrowRight, Copy, LoaderCircle, LogOut, Plus, Settings2 } from "lucide-react";
 import { toast } from "sonner";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { AuthPanel, type AuthUser } from "@/components/auth-panel";
+import { CabinetOverview } from "@/components/cabinet-overview";
 import { copyText } from "@/lib/copy-client";
 
-async function copy(value: string) { await copyText(value); toast.success("链接已复制"); }
+function safeReturnTo() {
+  const value = new URLSearchParams(window.location.search).get("returnTo");
+  if (!value || !value.startsWith("/") || value.startsWith("//")) return null;
+  try { const url = new URL(value, window.location.origin); return url.origin === window.location.origin ? url.pathname + url.search + url.hash : null; }
+  catch { return null; }
+}
+
+type CreatedCabinet = { shareUrl: string; adminUrl: string; cabinet: { name: string } };
+type ActiveForm = "create" | "join" | null;
 
 export default function Home() {
-  const [name, setName] = useState(""); const [joinLink, setJoinLink] = useState(""); const [creating, setCreating] = useState(false); const [created, setCreated] = useState<{ shareUrl: string; adminUrl: string; cabinet: { name: string } } | null>(null); const [user, setUser] = useState<{ username: string } | null>(null); const [loginOpen, setLoginOpen] = useState(false); const [username, setUsername] = useState(""); const [password, setPassword] = useState(""); const [loggingIn, setLoggingIn] = useState(false);
-  const createCabinet = useCallback(async (requestedName: string) => { if (!requestedName.trim()) { toast.error("请先给智能柜起个名字"); return null; } setCreating(true); try { const response = await fetch("/api/cabinets", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ name: requestedName }) }); const body = await response.json(); if (!response.ok) throw new Error(body.error); setCreated(body); toast.success("智能柜已创建"); return body; } catch (error) { toast.error(error instanceof Error ? error.message : "创建失败，请重试"); return null; } finally { setCreating(false); } }, []);
-  useEffect(() => { const context = (document as Document & { modelContext?: { registerTool?: (tool: unknown, options?: { signal: AbortSignal }) => unknown } }).modelContext; if (!context?.registerTool) return; const lifecycle = new AbortController(); void Promise.resolve(context.registerTool({ name: "create_cabinlink_cabinet", title: "创建智能柜", description: "创建一个无登录的文件共享智能柜，并返回分享与管理链接。", inputSchema: { type: "object", properties: { name: { type: "string", description: "智能柜名称" } }, required: ["name"], additionalProperties: false }, annotations: { readOnlyHint: false, untrustedContentHint: false }, async execute(input: unknown) { const requestedName = typeof input === "object" && input !== null && "name" in input ? (input as { name?: unknown }).name : undefined; if (typeof requestedName !== "string" || !requestedName.trim()) throw new Error("name 必须是非空字符串"); const result = await createCabinet(requestedName); if (!result) throw new Error("创建智能柜失败"); return { shareUrl: result.shareUrl, adminUrl: result.adminUrl }; } }, { signal: lifecycle.signal })).catch(() => undefined); return () => lifecycle.abort(); }, [createCabinet]);
-  useEffect(() => { void fetch("/api/auth/session").then((response) => response.json()).then((body) => setUser(body.user ?? null)).catch(() => undefined); }, []);
-  async function login() { setLoggingIn(true); try { const response = await fetch("/api/auth/login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ username, password }) }); const body = await response.json(); if (!response.ok) throw new Error(body.error); setUser(body.user); setPassword(""); setLoginOpen(false); toast.success(body.created ? "账号已创建并登录" : "登录成功"); } catch (error) { toast.error(error instanceof Error ? error.message : "登录失败"); } finally { setLoggingIn(false); } }
-  async function logout() { await fetch("/api/auth/session", { method: "DELETE" }); setUser(null); toast.success("已退出登录"); }
-  function joinCabinet(event: React.FormEvent) { event.preventDefault(); try { const url = new URL(joinLink.trim()); if (!/^\/(c|manage)\/[A-Za-z0-9_-]{32,}$/.test(url.pathname)) throw new Error(); window.location.assign(url.pathname); } catch { toast.error("请粘贴有效的智能柜链接"); } }
-  return <main className="min-h-screen bg-[#edf4f2] text-[#123047]"><div className="mx-auto max-w-6xl px-4 py-4 sm:px-8 sm:py-12">
-    <header className="flex items-center justify-between"><div className="flex items-center gap-2.5 sm:gap-3"><div className="grid size-10 place-items-center rounded-2xl bg-[#123047] text-[#eaf6f2] sm:size-11"><Archive className="size-5" /></div><div><p className="text-base font-bold tracking-tight sm:text-lg">柜联</p><p className="text-xs text-[#54707d] sm:text-sm">CabinLink</p></div></div>{user ? <div className="flex items-center gap-2"><a href="/my" className="inline-flex items-center gap-1.5 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-[#155a4c] shadow-sm"><UserRound className="size-4" /><span className="hidden sm:inline">我的智能柜</span><span className="sm:hidden">我的</span></a><button onClick={logout} className="rounded-xl border border-[#b7cccd] bg-white/65 px-3 py-2 text-sm text-[#45626c]">退出</button></div> : <button onClick={() => setLoginOpen(true)} className="inline-flex items-center gap-2 rounded-xl border border-[#b7cccd] bg-white/65 px-3 py-2 text-sm font-semibold text-[#28515b]"><LogIn className="size-4" /><span className="hidden sm:inline">账号登录</span><span className="sm:hidden">登录</span></button>}</header>
-    <section className="mt-8 grid gap-6 lg:mt-14 lg:grid-cols-[1.05fr_.95fr] lg:items-center"><div><p className="inline-flex items-center gap-2 rounded-full bg-[#d6f1e8] px-3 py-1.5 text-xs font-semibold text-[#155a4c] sm:text-sm"><span className="size-2 rounded-full bg-[#34b58a]" />有链接，就能共享</p><div className="mt-5 rounded-[1.7rem] border border-[#c7e4d8] bg-[#d7ffc8] p-5 shadow-[0_12px_30px_rgba(21,101,77,.08)] sm:hidden"><div className="flex items-start justify-between"><div><p className="text-xs font-bold tracking-wide text-[#39786b]">CABINET STATUS</p><p className="mt-1 text-xl font-extrabold">照片 · 文件 · 随时共享</p></div><Archive className="size-10 rounded-full bg-[#123047] p-2.5 text-white" /></div><div className="mt-5 flex items-center gap-2 text-sm font-semibold text-[#17584f]"><span>创建</span><span className="h-px flex-1 border-t-2 border-dashed border-[#74b9a6]" /><span>分享</span><span className="h-px flex-1 border-t-2 border-dashed border-[#74b9a6]" /><span>收集</span></div></div><h1 className="mt-6 max-w-xl text-[2.55rem] font-extrabold leading-[1.04] tracking-tight sm:mt-5 sm:text-6xl">把照片和文件，<br /><span className="rounded-md bg-[#123047] px-1.5 text-[#76dfbf] sm:bg-transparent sm:px-0 sm:text-[#17836d]">放进同一个柜子。</span></h1><p className="mt-5 max-w-lg text-base leading-7 text-[#54707d] sm:text-lg sm:leading-8">按主题整理资料。创建后分享链接，朋友和同事无需注册即可上传、查看和下载。</p><div className="mt-6 grid grid-cols-3 gap-2 border-t border-[#d4e2df] pt-4 text-xs text-[#46646d] sm:mt-9 sm:flex sm:flex-wrap sm:gap-5 sm:border-0 sm:p-0 sm:text-sm"><span className="flex items-center gap-1.5 sm:gap-2"><Upload className="size-4 text-[#17836d]" />照片与文件</span><span className="flex items-center gap-1.5 sm:gap-2"><LockKeyhole className="size-4 text-[#17836d]" />链接隔离</span><span className="flex items-center gap-1.5 sm:gap-2"><Link2 className="size-4 text-[#17836d]" />长期保存</span></div></div>
-      <div className="rounded-[1.75rem] border border-[#c1d6d5] bg-[#faffff] p-3 shadow-[0_18px_45px_rgba(21,65,78,.11)] sm:rounded-[2rem] sm:p-7"><div className="grid gap-3 sm:gap-5"><section className="rounded-[1.35rem] bg-[#123047] p-5 text-[#effcf9] sm:rounded-2xl sm:p-6"><div className="flex items-center justify-between"><div><p className="text-xs font-medium text-[#a9d9cd] sm:text-sm">新的共享空间</p><h2 className="mt-1 text-xl font-bold sm:text-2xl">创建智能柜</h2></div><Plus className="size-6 text-[#75d3b8]" /></div><label className="mt-5 block text-sm font-medium text-[#c5e8df]">智能柜名称<input value={name} onChange={(event) => setName(event.target.value)} onKeyDown={(event) => event.key === "Enter" && void createCabinet(name)} maxLength={60} placeholder="例如：国庆旅行照片" className="mt-2 w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-base text-white outline-none placeholder:text-[#a7c5bf] focus:border-[#75d3b8]" /></label><button onClick={() => void createCabinet(name)} disabled={creating} className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-[#75d3b8] px-4 py-3 font-semibold text-[#123047] transition hover:bg-[#9be4cf] disabled:opacity-60">{creating ? "正在创建…" : "创建并获取链接"}<ArrowRight className="size-4" /></button></section>
-        <form onSubmit={joinCabinet} className="rounded-[1.35rem] border border-[#d2dfdf] p-5 sm:rounded-2xl sm:p-6"><p className="text-xs font-medium text-[#55717a] sm:text-sm">已经有链接？</p><h2 className="mt-1 text-xl font-bold sm:text-2xl">加入智能柜</h2><div className="mt-4 flex gap-2 sm:mt-5"><input value={joinLink} onChange={(event) => setJoinLink(event.target.value)} placeholder="粘贴智能柜链接" className="min-w-0 flex-1 rounded-xl border border-[#c6d7d7] bg-white px-3 py-3 text-sm outline-none focus:border-[#17836d] sm:px-4 sm:text-base" /><button className="rounded-xl bg-[#e3f0ee] px-4 font-semibold text-[#155a4c] transition hover:bg-[#c9ece1]">加入</button></div></form></div></div></section>
-    {created && <section className="mt-6 rounded-[1.6rem] border border-[#8bcdbd] bg-[#edfff8] p-4 shadow-sm sm:mt-8 sm:rounded-3xl sm:p-6"><div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"><div><p className="font-bold text-[#155a4c]">{created.cabinet.name} 已创建</p><p className="mt-1 text-sm text-[#46646d]">请先保存管理链接；它是以后新建主题、删除文件和关闭智能柜的唯一凭证。</p></div><a href={new URL(created.adminUrl).pathname} className="shrink-0 rounded-xl bg-[#123047] px-4 py-2.5 text-center font-semibold text-white">进入管理</a></div><div className="mt-4 grid gap-3 sm:mt-5 sm:grid-cols-2">{[["分享链接", created.shareUrl], ["管理链接（请妥善保存）", created.adminUrl]].map(([label, value]) => <div key={label} className="rounded-xl border border-[#b8e2d5] bg-white p-3"><div className="flex items-center justify-between gap-3"><p className="text-sm font-medium text-[#155a4c]">{label}</p><button onClick={() => copy(value)} className="rounded-lg p-1.5 text-[#17836d] hover:bg-[#e3f5ef]" aria-label={`复制${label}`}><Copy className="size-4" /></button></div><p className="mt-2 truncate text-sm text-[#55717a]">{value}</p></div>)}</div></section>}
-    <Dialog open={loginOpen} onOpenChange={setLoginOpen}><DialogContent><DialogHeader><DialogTitle>账号登录</DialogTitle><DialogDescription>首次输入新账号会自动创建。登录后可在“我的智能柜”查看自己创建的空间。</DialogDescription></DialogHeader><div className="grid gap-3"><input value={username} onChange={(event) => setUsername(event.target.value)} maxLength={32} placeholder="账号（3–32 位）" className="rounded-xl border border-[#cbdad8] px-3 py-2.5 outline-none focus:border-[#17836d]" /><input value={password} onChange={(event) => setPassword(event.target.value)} onKeyDown={(event) => event.key === "Enter" && void login()} type="password" maxLength={128} placeholder="密码（至少 6 位）" className="rounded-xl border border-[#cbdad8] px-3 py-2.5 outline-none focus:border-[#17836d]" /></div><DialogFooter><button onClick={() => void login()} disabled={loggingIn} className="rounded-xl bg-[#123047] px-4 py-2 font-semibold text-white disabled:opacity-60">{loggingIn ? "登录中…" : "登录 / 创建账号"}</button></DialogFooter></DialogContent></Dialog>
+  const router = useRouter();
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [checkingSession, setCheckingSession] = useState(true);
+  const [activeForm, setActiveForm] = useState<ActiveForm>(null);
+  const [name, setName] = useState("");
+  const [joinLink, setJoinLink] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [created, setCreated] = useState<CreatedCabinet | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const createCabinet = useCallback(async (requestedName: string) => {
+    if (!requestedName.trim()) { toast.error("请输入智能柜名称"); return null; }
+    setBusy(true);
+    try {
+      const response = await fetch("/api/cabinets", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ name: requestedName }) });
+      const body = await response.json() as CreatedCabinet & { error?: string };
+      if (response.status === 401) { setUser(null); throw new Error("请重新登录"); }
+      if (!response.ok) throw new Error(body.error || "创建失败");
+      setCreated(body);
+      setName("");
+      setActiveForm(null);
+      setRefreshKey((key) => key + 1);
+      toast.success("创建成功");
+      return body;
+    } catch (error) { toast.error(error instanceof Error ? error.message : "创建失败"); return null; }
+    finally { setBusy(false); }
+  }, []);
+
+  useEffect(() => {
+    const context = (document as Document & { modelContext?: { registerTool?: (tool: unknown, options?: { signal: AbortSignal }) => unknown } }).modelContext;
+    if (!context?.registerTool) return;
+    const lifecycle = new AbortController();
+    void Promise.resolve(context.registerTool({
+      name: "create_cabinlink_cabinet", title: "创建智能柜", description: "为当前登录账号创建文件共享智能柜，并返回分享与管理链接。",
+      inputSchema: { type: "object", properties: { name: { type: "string", description: "智能柜名称" } }, required: ["name"], additionalProperties: false },
+      annotations: { readOnlyHint: false, untrustedContentHint: false },
+      async execute(input: unknown) {
+        const requestedName = typeof input === "object" && input !== null && "name" in input ? (input as { name?: unknown }).name : undefined;
+        if (typeof requestedName !== "string" || !requestedName.trim()) throw new Error("name 必须是非空字符串");
+        const result = await createCabinet(requestedName);
+        if (!result) throw new Error("创建智能柜失败");
+        return { shareUrl: result.shareUrl, adminUrl: result.adminUrl };
+      },
+    }, { signal: lifecycle.signal })).catch(() => undefined);
+    return () => lifecycle.abort();
+  }, [createCabinet]);
+
+  useEffect(() => {
+    void fetch("/api/auth/session").then(async (response) => {
+      if (!response.ok) throw new Error("读取登录状态失败");
+      return response.json();
+    }).then((body) => setUser((body as { user: AuthUser | null }).user ?? null)).catch(() => setUser(null)).finally(() => setCheckingSession(false));
+  }, []);
+  useEffect(() => { if (user) { const destination = safeReturnTo(); if (destination && destination !== "/") window.location.replace(destination); } }, [user]);
+
+  async function logout() {
+    const response = await fetch("/api/auth/session", { method: "DELETE" });
+    if (!response.ok) return toast.error("退出失败");
+    setUser(null); setCreated(null);
+  }
+  async function joinCabinet(event: React.FormEvent) {
+    event.preventDefault();
+    let target: URL;
+    try {
+      target = new URL(joinLink.trim(), window.location.origin);
+      if (target.origin !== window.location.origin || !/^\/(c|manage)\/[A-Za-z0-9_-]{32,}$/.test(target.pathname)) throw new Error();
+    } catch { toast.error("请粘贴有效的智能柜链接"); return; }
+    setBusy(true);
+    try {
+      const token = target.pathname.split("/")[2];
+      const response = await fetch(`/api/cabinets/${token}/join`, { method: "POST" });
+      const body = await response.json() as { error?: string; cabinet?: { id: string } };
+      if (response.status === 401) { setUser(null); throw new Error("请重新登录"); }
+      if (!response.ok || !body.cabinet) throw new Error(body.error || "加入失败");
+      router.push(target.pathname);
+    } catch (error) { toast.error(error instanceof Error ? error.message : "加入失败"); setBusy(false); }
+  }
+
+  if (checkingSession) return <main className="grid min-h-screen place-items-center bg-[#f5f8f7]"><LoaderCircle className="size-6 animate-spin text-[#6b938b]" /></main>;
+  if (!user) return <AuthPanel onAuthenticated={setUser} />;
+
+  return <main className="min-h-screen bg-[#f5f8f7] text-[#193440]"><div className="mx-auto max-w-xl px-5 pb-12 pt-7 sm:pt-12">
+    <header className="flex items-center justify-between gap-3">
+      <Link href="/" className="flex items-center gap-2.5"><span className="grid size-9 place-items-center rounded-xl bg-[#193440] text-white"><Archive className="size-4" /></span><span className="font-bold">柜联</span></Link>
+      <div className="flex min-w-0 items-center gap-2"><span className="max-w-24 truncate text-sm text-[#7d9295] sm:max-w-40">{user.username || user.email}</span><Link href="/settings" aria-label="账号设置" className="grid size-10 place-items-center rounded-xl text-[#667f82] hover:bg-white"><Settings2 className="size-4" /></Link><button onClick={() => void logout()} aria-label="退出登录" className="grid size-10 place-items-center rounded-xl text-[#667f82] hover:bg-white"><LogOut className="size-4" /></button></div>
+    </header>
+    <h1 className="mt-11 text-[1.7rem] font-bold tracking-tight">我的智能柜</h1>
+    <div className="mt-6 grid grid-cols-2 gap-3">
+      <button onClick={() => { setActiveForm(activeForm === "create" ? null : "create"); setCreated(null); }} className="flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-[#193440] px-3 text-sm font-semibold text-white"><Plus className="size-4" />创建智能柜</button>
+      <button onClick={() => { setActiveForm(activeForm === "join" ? null : "join"); setCreated(null); }} className="flex min-h-14 items-center justify-center gap-2 rounded-2xl border border-[#dfe8e5] bg-white px-3 text-sm font-semibold text-[#193440]"><ArrowRight className="size-4" />加入智能柜</button>
+    </div>
+    {activeForm === "create" && <form onSubmit={(event) => { event.preventDefault(); void createCabinet(name); }} className="mt-4 flex gap-2 rounded-2xl border border-[#dfe8e5] bg-white p-3"><input autoFocus aria-label="智能柜名称" value={name} onChange={(event) => setName(event.target.value)} maxLength={60} placeholder="智能柜名称" className="min-w-0 flex-1 bg-transparent px-2 text-sm outline-none" /><button disabled={busy} className="min-h-10 rounded-xl bg-[#193440] px-4 text-sm font-semibold text-white disabled:opacity-50">创建</button></form>}
+    {activeForm === "join" && <form onSubmit={joinCabinet} className="mt-4 flex gap-2 rounded-2xl border border-[#dfe8e5] bg-white p-3"><input autoFocus aria-label="智能柜链接" value={joinLink} onChange={(event) => setJoinLink(event.target.value)} placeholder="粘贴智能柜链接" className="min-w-0 flex-1 bg-transparent px-2 text-sm outline-none" /><button disabled={busy} className="min-h-10 rounded-xl bg-[#193440] px-4 text-sm font-semibold text-white disabled:opacity-50">加入</button></form>}
+    {created && <section className="mt-4 rounded-2xl border border-[#d3e8df] bg-[#f0faf5] p-4"><div className="flex items-center justify-between gap-2"><span className="min-w-0 truncate font-semibold">{created.cabinet.name}</span><a href={new URL(created.adminUrl).pathname} className="text-sm font-semibold text-[#176a56]">进入 <ArrowRight className="inline size-4" /></a></div><div className="mt-3 flex gap-2"><button onClick={() => void copyText(created.shareUrl).then(() => toast.success("分享链接已复制"))} className="inline-flex min-h-10 items-center gap-1.5 rounded-xl bg-white px-3 text-xs font-semibold text-[#176a56]"><Copy className="size-3.5" />复制分享链接</button><button onClick={() => void copyText(created.adminUrl).then(() => toast.success("管理链接已复制"))} className="inline-flex min-h-10 items-center gap-1.5 rounded-xl bg-white px-3 text-xs font-semibold text-[#176a56]"><Copy className="size-3.5" />复制管理链接</button></div></section>}
+    <CabinetOverview refreshKey={refreshKey} />
   </div></main>;
 }

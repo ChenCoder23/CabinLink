@@ -1,8 +1,9 @@
 import { MAX_FILE_BYTES, fileKey, jsonError, requireStorage, safeName } from "@/lib/cabinet-server";
-import { authorizeCabinet } from "@/lib/auth-server";
+import { authorizeCabinet, sessionUser } from "@/lib/auth-server";
 
 export async function POST(request: Request) {
   try {
+    if (!await sessionUser(request)) return jsonError("请先登录。", 401);
     const payload = await request.json() as { cabinetId?: string; themeId?: string; name?: unknown; contentType?: unknown; size?: unknown };
     const cabinet = await authorizeCabinet(request, payload.cabinetId ?? ""); if (!cabinet) return jsonError("智能柜链接无效。", 403);
     const name = safeName(payload.name, 180); const size = typeof payload.size === "number" ? payload.size : 0; const contentType = typeof payload.contentType === "string" && payload.contentType.length < 160 ? payload.contentType : "application/octet-stream";

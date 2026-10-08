@@ -1,8 +1,9 @@
 import { jsonError, requireStorage, safeName } from "@/lib/cabinet-server";
-import { authorizeCabinet } from "@/lib/auth-server";
+import { authorizeCabinet, sessionUser } from "@/lib/auth-server";
 
 export async function POST(request: Request) {
   try {
+    if (!await sessionUser(request)) return jsonError("请先登录。", 401);
     const payload = await request.json() as { cabinetId?: string; name?: unknown };
     const cabinet = await authorizeCabinet(request, payload.cabinetId ?? "", "admin"); const name = safeName(payload.name, 60);
     if (!cabinet) return jsonError("只有创建者可以新建主题。", 403); if (!name) return jsonError("请填写主题名称。");

@@ -1,7 +1,9 @@
 import { jsonError, requireStorage, resolveCabinet, shareTokenFromAdmin } from "@/lib/cabinet-server";
+import { sessionUser } from "@/lib/auth-server";
 
 export async function GET(_: Request, { params }: { params: Promise<{ token: string }> }) {
   try {
+    if (!await sessionUser(_)) return jsonError("请先登录。", 401);
     const { token } = await params; const cabinet = await resolveCabinet(token);
     if (!cabinet) return jsonError("智能柜不存在、已关闭或链接无效。", 404);
     const { db } = requireStorage();
@@ -11,6 +13,6 @@ export async function GET(_: Request, { params }: { params: Promise<{ token: str
       db.prepare("SELECT COALESCE(SUM(f.size_bytes), 0) AS used FROM files f JOIN themes t ON t.id = f.theme_id WHERE t.cabinet_id = ?").bind(cabinet.id).first<{ used: number }>(),
     ]);
     const shareUrl = cabinet.role === "admin" ? `${new URL(_.url).origin}/c/${await shareTokenFromAdmin(token)}` : undefined;
-    return Response.json({ cabinet: { id: cabinet.id, name: cabinet.name, quotaBytes: cabinet.quota_bytes, usedBytes: usage?.used ?? 0, role: cabinet.role, shareUrl }, themes: themeRows.results.map((theme) => ({ ...theme, files: fileRows.results.filter((file) => file.theme_id === theme.id) })) });
+    return Response.json({ cabinet: { id: cabinet.id, name: cabinet.name, quotaBytes: cabinet.quota_bytes, usedBytes: usage?.used ?? 0, role: cabinet.role, shareUrl }, themes: themeRows.results.map((theme) => ({ ...theme, files: fileRows.results.filter((file) => file.theme_id === theme.id) })) }, { headers: { "Cache-Control": "private, no-store" } });
   } catch (error) { console.error(error); return jsonError("读取智能柜失败，请稍后重试。", 500); }
 }

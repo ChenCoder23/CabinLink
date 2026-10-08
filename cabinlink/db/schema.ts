@@ -1,4 +1,4 @@
-import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { index, integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const cabinets = sqliteTable("cabinets", {
   id: text("id").primaryKey(), name: text("name").notNull(),
@@ -6,8 +6,21 @@ export const cabinets = sqliteTable("cabinets", {
   quotaBytes: integer("quota_bytes").notNull(), ownerUserId: text("owner_user_id"), closedAt: text("closed_at"), createdAt: text("created_at").notNull(),
 }, (table) => [index("idx_cabinets_owner_user_id").on(table.ownerUserId)]);
 export const users = sqliteTable("users", {
-  id: text("id").primaryKey(), username: text("username").notNull().unique(), passwordSalt: text("password_salt").notNull(),
-  passwordHash: text("password_hash").notNull(), createdAt: text("created_at").notNull(),
+  id: text("id").primaryKey(), username: text("username").unique(), email: text("email").unique(),
+  passwordSalt: text("password_salt"), passwordHash: text("password_hash"), createdAt: text("created_at").notNull(),
+});
+export const cabinetMemberships = sqliteTable("cabinet_memberships", {
+  cabinetId: text("cabinet_id").notNull().references(() => cabinets.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  joinedAt: text("joined_at").notNull(),
+}, (table) => [primaryKey({ columns: [table.cabinetId, table.userId] }), index("idx_cabinet_memberships_user_id").on(table.userId)]);
+export const emailCodes = sqliteTable("email_codes", {
+  email: text("email").primaryKey(), purpose: text("purpose").notNull(), userId: text("user_id"),
+  codeHash: text("code_hash"), expiresAt: text("expires_at").notNull(), attempts: integer("attempts").notNull().default(0),
+  sentAt: text("sent_at").notNull(), windowStartedAt: text("window_started_at").notNull(), sendsInWindow: integer("sends_in_window").notNull().default(1),
+});
+export const loginAttempts = sqliteTable("login_attempts", {
+  username: text("username").primaryKey(), attempts: integer("attempts").notNull(), windowStartedAt: text("window_started_at").notNull(),
 });
 export const sessions = sqliteTable("sessions", {
   id: text("id").primaryKey(), userId: text("user_id").notNull(), tokenHash: text("token_hash").notNull().unique(),

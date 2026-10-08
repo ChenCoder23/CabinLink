@@ -135,3 +135,27 @@ body {
   color: var(--foreground);
   font-family: Arial, "Microsoft YaHei", "PingFang SC", sans-serif;
 }
+
+.site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.6rem;
+  padding: 1.25rem max(1rem, env(safe-area-inset-right)) calc(1.25rem + env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+  border-top: 1px solid #d4e1df;
+  background: #edf4f2;
+  color: #54707d;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.site-footer-label {
+  color: #155a4c;
+  font-weight: 700;
+}
+
+@media (max-width: 639px) {
+  .site-footer { padding-top: 1rem; padding-bottom: calc(1rem + env(safe-area-inset-bottom)); }
+}

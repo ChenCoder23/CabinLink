@@ -16,6 +16,7 @@ const managedLinux = readExecutionProfile() === "managed-linux";
 const localBindingConfig = {
   main: "vinext/server/fetch-handler",
   compatibility_flags: ["nodejs_compat"],
+  secrets: { required: ["RESEND_API_KEY", "RESEND_FROM_EMAIL", "EMAIL_CODE_SECRET"] },
   d1_databases: d1
     ? [
         {
