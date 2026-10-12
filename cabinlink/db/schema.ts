@@ -5,8 +5,15 @@ export const cabinets = sqliteTable("cabinets", {
   shareTokenHash: text("share_token_hash").notNull().unique(), adminTokenHash: text("admin_token_hash").notNull().unique(),
   quotaBytes: integer("quota_bytes").notNull(), ownerUserId: text("owner_user_id"), closedAt: text("closed_at"), createdAt: text("created_at").notNull(),
 }, (table) => [index("idx_cabinets_owner_user_id").on(table.ownerUserId)]);
+export const cabinetLinks = sqliteTable("cabinet_links", {
+  cabinetId: text("cabinet_id").primaryKey().references(() => cabinets.id, { onDelete: "cascade" }),
+  adminToken: text("admin_token").notNull(),
+  adminTokenHash: text("admin_token_hash").notNull().unique(),
+  shareTokenHash: text("share_token_hash").notNull().unique(),
+});
 export const users = sqliteTable("users", {
   id: text("id").primaryKey(), username: text("username").unique(), email: text("email").unique(),
+  role: text("role").notNull().default("user"), bannedAt: text("banned_at"), banReason: text("ban_reason"),
   passwordSalt: text("password_salt"), passwordHash: text("password_hash"), createdAt: text("created_at").notNull(),
 });
 export const cabinetMemberships = sqliteTable("cabinet_memberships", {
@@ -41,3 +48,7 @@ export const uploads = sqliteTable("uploads", {
   uploadId: text("upload_id").notNull(), originalName: text("original_name").notNull(), contentType: text("content_type").notNull(),
   sizeBytes: integer("size_bytes").notNull(), partsJson: text("parts_json").notNull().default("[]"), expiresAt: text("expires_at").notNull(), createdAt: text("created_at").notNull(),
 }, (table) => [index("idx_uploads_cabinet_id").on(table.cabinetId), index("idx_uploads_expires_at").on(table.expiresAt)]);
+
+export const adminAuditLogs = sqliteTable("admin_audit_logs", {
+  id: text("id").primaryKey(), actorId: text("actor_id").notNull(), targetId: text("target_id").notNull(), action: text("action").notNull(), detail: text("detail"), createdAt: text("created_at").notNull(),
+});

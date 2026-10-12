@@ -25,6 +25,8 @@ export async function POST(request: Request) {
       catch { found = await db.prepare("SELECT id, username, email FROM users WHERE email = ?").bind(email).first<{ id: string; username: string | null; email: string }>(); }
     }
     if (!found) return jsonError("登录失败，请稍后重试。", 500);
+    const blocked = await db.prepare("SELECT banned_at FROM users WHERE id = ?").bind(found.id).first<{ banned_at: string | null }>();
+    if (blocked?.banned_at) return jsonError("账号已被封禁，请联系管理员。", 403);
     const session = await createSession(found.id);
     return Response.json({ user: found }, { headers: { "Set-Cookie": sessionCookie(session.token, request) } });
   } catch (error) { console.error(error); return jsonError("验证码校验失败，请稍后重试。", 500); }

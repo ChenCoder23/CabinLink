@@ -7,7 +7,7 @@ const CODE_RESEND_SECONDS = 60;
 const CODE_SEND_LIMIT = 5;
 const CODE_ATTEMPT_LIMIT = 5;
 
-export type SessionUser = { id: string; username: string | null; email: string | null };
+export type SessionUser = { id: string; username: string | null; email: string | null; role: "user" | "admin" };
 type CodePurpose = "login" | "bind";
 type CodeRow = { email: string; purpose: string; user_id: string | null; code_hash: string | null; expires_at: string; attempts: number; sent_at: string; window_started_at: string; sends_in_window: number };
 
@@ -17,8 +17,8 @@ export function validUsername(value: unknown) { return typeof value === "string"
 export function validPassword(value: unknown) { return typeof value === "string" && value.length >= 6 && value.length <= 128; }
 export function normalizeEmail(value: unknown) { if (typeof value !== "string") return null; const email = value.trim().toLowerCase(); return email.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : null; }
 export async function passwordHash(password: string, salt: string) { const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveBits"]); const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: new TextEncoder().encode(salt), iterations: 100_000 }, key, 256); return hex(bits); }
-export async function sessionUser(request: Request): Promise<SessionUser | null> { const token = cookieValue(request, "cabinlink_session"); if (!token) return null; const { db } = requireStorage(); return db.prepare("SELECT u.id, u.username, u.email FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > ? LIMIT 1").bind(await hashToken(token), new Date().toISOString()).first<SessionUser>(); }
-export async function createSession(userId: string) { const token = newToken(); const now = new Date(); const expiresAt = new Date(now.getTime() + SESSION_DAYS * 86_400_000).toISOString(); const { db } = requireStorage(); await db.prepare("INSERT INTO sessions (id, user_id, token_hash, expires_at, created_at) VALUES (?, ?, ?, ?, ?)").bind(crypto.randomUUID(), userId, await hashToken(token), expiresAt, now.toISOString()).run(); return { token, expiresAt }; }
+export async function sessionUser(request: Request): Promise<SessionUser | null> { const token = cookieValue(request, "cabinlink_session"); if (!token) return null; const { db } = requireStorage(); return db.prepare("SELECT u.id, u.username, u.email, u.role FROM sessions s JOIN users u ON u.id = s.user_id WHERE u.banned_at IS NULL AND s.token_hash = ? AND s.expires_at > ? LIMIT 1").bind(await hashToken(token), new Date().toISOString()).first<SessionUser>(); }
+export async function createSession(userId: string) { const token = newToken(); const now = new Date(); const expiresAt = new Date(now.getTime() + SESSION_DAYS * 86_400_000).toISOString(); const { db } = requireStorage(); const result = await db.prepare("INSERT INTO sessions (id, user_id, token_hash, expires_at, created_at) SELECT ?, id, ?, ?, ? FROM users WHERE id = ? AND banned_at IS NULL").bind(crypto.randomUUID(), await hashToken(token), expiresAt, now.toISOString(), userId).run(); if (!result.meta.changes) throw new Error("账号已被封禁。"); return { token, expiresAt }; }
 function requestIsSecure(request: Request) { return new URL(request.url).protocol === "https:" || request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim() === "https"; }
 export function publicOrigin(request: Request) { const url = new URL(request.url); if (requestIsSecure(request)) url.protocol = "https:"; return url.origin; }
 export function sessionCookie(token: string, request: Request) { const secure = requestIsSecure(request) ? "; Secure" : ""; return `cabinlink_session=${token}; Path=/; HttpOnly; SameSite=Lax${secure}; Max-Age=${SESSION_DAYS * 86_400}`; }

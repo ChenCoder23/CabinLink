@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Archive, ArrowRight, KeyRound, Mail } from "lucide-react";
+import { ArrowRight, KeyRound, Mail } from "lucide-react";
+import { SiteBrand } from "@/components/site-brand";
 import { toast } from "sonner";
 
-export type AuthUser = { id: string; username: string | null; email: string | null };
+export type AuthUser = { role?: "user" | "admin"; id: string; username: string | null; email: string | null };
 type Mode = "login" | "register" | "email";
 
 async function post(url: string, payload: object): Promise<{ user: AuthUser }> {
@@ -51,7 +52,7 @@ export function AuthPanel({ onAuthenticated }: { onAuthenticated: (user: AuthUse
 
   return <main className="grid min-h-screen place-items-center bg-[#edf4f2] px-3 py-5 text-[#123047] sm:px-4 sm:py-8">
     <div className="w-full max-w-md rounded-[1.75rem] border border-[#c7dcd8] bg-white p-5 shadow-[0_18px_45px_rgba(21,65,78,.1)] sm:p-8">
-      <div className="flex items-center gap-3"><span className="grid size-11 place-items-center rounded-2xl bg-[#123047] text-white"><Archive className="size-5" /></span><div><b className="text-lg">柜联</b><p className="text-sm text-[#58727b]">登录后共享照片和文件</p></div></div>
+      <div><div className="flex items-center gap-3"><SiteBrand /></div><p className="mt-2 text-sm text-[#58727b]">登录后共享照片和文件</p></div>
       <div className="mt-6 grid grid-cols-3 rounded-xl bg-[#edf4f2] p-1 sm:mt-7" role="tablist" aria-label="登录方式">
         {([["login", "账号登录"], ["register", "注册账号"], ["email", "邮箱登录"]] as const).map(([value, label]) => <button key={value} type="button" role="tab" aria-selected={mode === value} onClick={() => setMode(value)} className={`min-h-11 rounded-lg px-1 py-2.5 text-xs font-semibold sm:px-2 sm:text-sm ${mode === value ? "bg-white text-[#123047] shadow-sm" : "text-[#5d777d]"}`}>{label}</button>)}
       </div>

@@ -1,3 +1,4 @@
+import { BrandProvider } from "@/components/site-brand";
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
@@ -11,8 +12,8 @@ export const metadata: Metadata = {
     images: [{ url: "/cabinlink-poster.png", width: 1122, height: 1402, alt: "柜联网站介绍海报" }],
   },
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
+    icon: "/site-logo.png",
+    shortcut: "/site-logo.png",
   },
 };
 
@@ -24,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body className="antialiased">
-        {children}
+        <BrandProvider>{children}</BrandProvider>
         <footer className="site-footer" aria-label="免责声明">
           <span className="site-footer-label">免责声明</span>
           <span>本项目由华北水利水电大学陈会闯开发，仅供学习和参考。</span>

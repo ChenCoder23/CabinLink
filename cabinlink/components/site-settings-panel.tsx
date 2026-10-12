@@ -1,0 +1,16 @@
+"use client";
+/* eslint-disable @next/next/no-img-element -- Preview uses uploaded data URLs. */
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+type Settings = { desktopTitle: string; mobileTitle: string; logoUrl: string; canManage?: boolean };
+export default function SiteSettingsPanel() {
+  const [settings, setSettings] = useState<Settings | null>(null);
+  const [busy, setBusy] = useState(false);
+  useEffect(() => { void fetch("/api/site-settings").then(async (response) => { if (response.ok) setSettings(await response.json() as Settings); }).catch(() => undefined); }, []);
+  if (!settings?.canManage) return null;
+  async function save(event: React.FormEvent) {
+    event.preventDefault(); setBusy(true);
+    try { const response = await fetch("/api/site-settings", { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify(settings) }); const body = await response.json() as Settings & { error?: string }; if (!response.ok) throw new Error(body.error); setSettings({ ...body, canManage: true }); window.dispatchEvent(new Event("site-brand-updated")); toast.success("网站设置已保存"); } catch (error) { toast.error(error instanceof Error ? error.message : "保存失败"); } finally { setBusy(false); }
+  }
+  return <section className="rounded-3xl border border-[#cbded9] bg-white p-5 sm:p-6"><h2 className="text-xl font-bold">网站设置</h2><form onSubmit={save} className="mt-5 grid gap-4">{([{ key: "desktopTitle", label: "电脑端文字标题", max: 40 }, { key: "mobileTitle", label: "手机端文字标题", max: 20 }] as const).map(({ key, label, max }) => <label key={key} className="grid gap-2 text-sm font-semibold">{label}<input required maxLength={max} value={settings[key]} onChange={(event) => setSettings({ ...settings, [key]: event.target.value })} className="min-w-0 rounded-xl border px-4 py-3" /></label>)}<label className="grid gap-2 text-sm font-semibold">网站 Logo（PNG / JPEG / WebP，最大 500 KB）<input type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => { const file = event.target.files?.[0]; event.target.value = ""; if (!file) return; if (file.size > 500 * 1024 || !["image/png", "image/jpeg", "image/webp"].includes(file.type)) { toast.error("请上传 500 KB 以内的 PNG、JPEG 或 WebP 图片"); return; } const reader = new FileReader(); reader.onload = () => setSettings((current) => current ? { ...current, logoUrl: String(reader.result) } : current); reader.onerror = () => toast.error("图片读取失败"); reader.readAsDataURL(file); }} /></label><div><img src={settings.logoUrl || "/site-logo.png"} alt="Logo 预览" className="size-16 object-contain" /><button type="button" onClick={() => setSettings({ ...settings, logoUrl: "" })} className="mt-2 text-sm text-[#a44444]">恢复默认 Logo</button></div><button disabled={busy} className="min-h-11 rounded-xl bg-[#123047] px-4 py-3 font-semibold text-white disabled:opacity-50">{busy ? "保存中…" : "保存网站设置"}</button></form></section>;
+}

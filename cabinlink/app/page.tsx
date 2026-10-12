@@ -1,9 +1,10 @@
 "use client";
+import { SiteBrand } from "@/components/site-brand";
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Archive, ArrowRight, Copy, LoaderCircle, LogOut, Plus, Settings2 } from "lucide-react";
+import { ArrowRight, Copy, LoaderCircle, LogOut, Plus, Settings2 } from "lucide-react";
 import { toast } from "sonner";
 import { AuthPanel, type AuthUser } from "@/components/auth-panel";
 import { CabinetOverview } from "@/components/cabinet-overview";
@@ -103,8 +104,8 @@ export default function Home() {
 
   return <main className="min-h-screen bg-[#f5f8f7] text-[#193440]"><div className="mx-auto max-w-xl px-5 pb-12 pt-7 sm:pt-12">
     <header className="flex items-center justify-between gap-3">
-      <Link href="/" className="flex items-center gap-2.5"><span className="grid size-9 place-items-center rounded-xl bg-[#193440] text-white"><Archive className="size-4" /></span><span className="font-bold">柜联</span></Link>
-      <div className="flex min-w-0 items-center gap-2"><span className="max-w-24 truncate text-sm text-[#7d9295] sm:max-w-40">{user.username || user.email}</span><Link href="/settings" aria-label="账号设置" className="grid size-10 place-items-center rounded-xl text-[#667f82] hover:bg-white"><Settings2 className="size-4" /></Link><button onClick={() => void logout()} aria-label="退出登录" className="grid size-10 place-items-center rounded-xl text-[#667f82] hover:bg-white"><LogOut className="size-4" /></button></div>
+      <Link href="/" className="flex items-center gap-2.5"><SiteBrand /></Link>
+      <div className="flex min-w-0 items-center gap-2"><span className="max-w-24 truncate text-sm text-[#7d9295] sm:max-w-40">{user.username || user.email}</span>{user?.role === "admin" && <Link href="/admin" className="rounded-lg border px-3 py-2 text-sm">管理后台</Link>}<Link href="/settings" aria-label="账号设置" className="grid size-10 place-items-center rounded-xl text-[#667f82] hover:bg-white"><Settings2 className="size-4" /></Link><button onClick={() => void logout()} aria-label="退出登录" className="grid size-10 place-items-center rounded-xl text-[#667f82] hover:bg-white"><LogOut className="size-4" /></button></div>
     </header>
     <h1 className="mt-11 text-[1.7rem] font-bold tracking-tight">我的智能柜</h1>
     <div className="mt-6 grid grid-cols-2 gap-3">

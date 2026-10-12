@@ -17,7 +17,7 @@ export async function shareTokenFromAdmin(adminToken: string) {
 export async function resolveCabinet(token: string, requiredRole: Role = "share") {
   if (!token || token.length < 32) return null;
   const { db } = requireStorage(); const tokenHash = await hashToken(token);
-  const result = await db.prepare("SELECT id, name, quota_bytes, closed_at, CASE WHEN admin_token_hash = ? THEN 'admin' WHEN share_token_hash = ? THEN 'share' ELSE NULL END AS role FROM cabinets WHERE admin_token_hash = ? OR share_token_hash = ? LIMIT 1").bind(tokenHash, tokenHash, tokenHash, tokenHash).first<{ id: string; name: string; quota_bytes: number; closed_at: string | null; role: Role | null }>();
+  const result = await db.prepare("SELECT c.id, c.name, c.quota_bytes, c.closed_at, CASE WHEN c.admin_token_hash = ? OR l.admin_token_hash = ? THEN 'admin' WHEN c.share_token_hash = ? OR l.share_token_hash = ? THEN 'share' ELSE NULL END AS role FROM cabinets c LEFT JOIN cabinet_links l ON l.cabinet_id = c.id WHERE c.admin_token_hash = ? OR c.share_token_hash = ? OR l.admin_token_hash = ? OR l.share_token_hash = ? LIMIT 1").bind(tokenHash, tokenHash, tokenHash, tokenHash, tokenHash, tokenHash, tokenHash, tokenHash).first<{ id: string; name: string; quota_bytes: number; closed_at: string | null; role: Role | null }>();
   if (!result || !result.role || result.closed_at || (requiredRole === "admin" && result.role !== "admin")) return null;
   return result;
 }

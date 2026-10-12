@@ -12,6 +12,7 @@ export async function POST(request: Request) {
     const { db } = requireStorage();
     await db.batch([
       db.prepare("INSERT INTO cabinets (id, name, share_token_hash, admin_token_hash, quota_bytes, owner_user_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)").bind(id, name, await hashToken(shareToken), await hashToken(adminToken), DEFAULT_QUOTA_BYTES, user.id, now),
+      db.prepare("INSERT INTO cabinet_links (cabinet_id, admin_token, admin_token_hash, share_token_hash) VALUES (?, ?, ?, ?)").bind(id, adminToken, await hashToken(adminToken), await hashToken(shareToken)),
       db.prepare("INSERT INTO themes (id, cabinet_id, name, created_at) VALUES (?, ?, ?, ?)").bind(themeId, id, "未分类", now),
     ]);
     const origin = publicOrigin(request);
