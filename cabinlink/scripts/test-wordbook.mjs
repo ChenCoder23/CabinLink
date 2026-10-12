@@ -1,0 +1,41 @@
+import {build} from 'esbuild';
+import {Miniflare} from 'miniflare';
+import ExcelJS from 'exceljs';
+import {mkdtemp,readFile,readdir,rm} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import path from 'node:path';
+import {createHash} from 'node:crypto';
+import assert from 'node:assert/strict';
+const root=process.cwd(),scratch=await mkdtemp(path.join(tmpdir(),'cabinlink-words-'));
+let mf;
+try {
+ const out=path.join(scratch,'worker.mjs');
+ await build({stdin:{contents:`import {GET as adminGet,POST as adminPost} from './app/api/admin/wordbook/route';import {GET,POST} from './app/api/wordbook/route';export default {fetch(r){const admin=new URL(r.url).pathname.includes('/admin/');return r.method==='GET'?(admin?adminGet(r):GET(r)):(admin?adminPost(r):POST(r));}}`,resolveDir:root},bundle:true,format:'esm',platform:'browser',external:['cloudflare:workers'],alias:{'@':root,'exceljs':'exceljs/dist/exceljs.min.js'},outfile:out});
+ mf=new Miniflare({modules:true,scriptPath:out,compatibilityDate:'2026-05-01',compatibilityFlags:['nodejs_compat'],d1Databases:['DB'],r2Buckets:['BUCKET']});
+ const db=await mf.getD1Database('DB');
+ for(const f of (await readdir('drizzle')).filter(f=>f.endsWith('.sql')).sort())for(const s of (await readFile(path.join('drizzle',f),'utf8')).split(/;\s*(?:--> statement-breakpoint)?/).map(s=>s.trim()).filter(Boolean))await db.prepare(s).run();
+ const now=new Date().toISOString(),today=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Shanghai'});
+ for(const [id,role] of [['admin','admin'],['alice','user'],['bob','user']]){await db.prepare('INSERT INTO users(id,username,role,created_at) VALUES(?,?,?,?)').bind(id,id,role,now).run();await db.prepare('INSERT INTO sessions(id,user_id,token_hash,expires_at,created_at) VALUES(?,?,?,?,?)').bind(id,id,createHash('sha256').update(id).digest('hex'),new Date(Date.now()+86400000).toISOString(),now).run();}
+ const call=async(p,user,method='GET',body,origin)=>{let multipartHeaders={};if(body instanceof FormData){const encoded=new Request('http://localhost',{method:'POST',body});multipartHeaders={'content-type':encoded.headers.get('content-type')};body=new Uint8Array(await encoded.arrayBuffer());}return mf.dispatchFetch('http://localhost'+p,{method,headers:{...multipartHeaders,...(user?{cookie:'cabinlink_session='+user}:{}),...(body&&!(body instanceof Uint8Array)?{'content-type':'application/json'}:{}),...(origin?{origin}:{})},...(body?{body:body instanceof Uint8Array?body:JSON.stringify(body)}:{})});};
+ assert.equal((await call('/api/wordbook')).status,401);
+ assert.equal((await call('/api/admin/wordbook','alice')).status,403);
+ assert.equal((await call('/api/admin/wordbook','admin','POST',{action:'category',name:'四级'},'https://foreign.example')).status,403);
+ assert.equal((await call('/api/admin/wordbook','admin','POST',{action:'category',name:'四级'})).status,200);
+ const category=(await (await call('/api/admin/wordbook','admin')).json()).categories[0].id;
+ const template=await call('/api/admin/wordbook?template=1','admin');assert.equal(template.status,200);const wb=new ExcelJS.Workbook();await wb.xlsx.load(await template.arrayBuffer());assert.equal(wb.worksheets[0].getCell('A1').text,'英文');
+ const upload=async(rows,date=today)=>{const w=new ExcelJS.Workbook(),s=w.addWorksheet('单词');s.addRow(['英文','中文意思']);for(const row of rows)s.addRow(row);const form=new FormData();form.set('file',new File([await w.xlsx.writeBuffer()],'words.xlsx'));form.set('category',category);form.set('date',date);return call('/api/admin/wordbook','admin','POST',form);};
+ let r=await upload([['apple','苹果'],['learn','学习']]);assert.equal(r.status,200,await r.clone().text());assert.equal((await r.json()).count,2);
+ r=await upload([['valid','有效'],['broken','']]);assert.equal(r.status,400);assert.match((await r.json()).errors[0],/第 3 行/);assert.equal((await db.prepare('SELECT COUNT(*) n FROM word_entries').first()).n,2);
+ assert.equal((await upload([['apple','苹果'],['Apple','苹果']])).status,400);
+ const future='2099-01-01';assert.equal((await upload([['future','未来']],future)).status,200);
+ let data=await (await call(`/api/wordbook?category=${category}&date=${today}`,'alice')).json();assert.equal(data.words.length,2);assert.ok(data.words[0].uploaded_at);assert.equal((await call(`/api/wordbook?category=${category}&date=${future}`,'alice')).status,400);
+ assert.equal((await call('/api/wordbook','alice','POST',{action:'createTag',name:'重点',color:'#ff0000'})).status,200);
+ data=await (await call(`/api/wordbook?category=${category}`,'alice')).json();const tag=data.tags[0].id,word=data.words[0].id;
+ assert.equal((await call('/api/wordbook','bob','POST',{action:'applyTag',tagId:tag,ids:[word]})).status,404);
+ for(let i=0;i<2;i++)assert.equal((await call('/api/wordbook','alice','POST',{action:'applyTag',tagId:tag,ids:[word]})).status,200);
+ data=await (await call(`/api/wordbook?category=${category}&tag=${tag}`,'alice')).json();assert.equal(data.words.length,1);assert.equal(data.links.length,1);
+ data=await (await call(`/api/wordbook?category=${category}&tag=${tag}`,'bob')).json();assert.equal(data.words.length,0);assert.equal(data.tags.length,0);
+ assert.equal((await call('/api/wordbook','alice','POST',{action:'removeTag',tagId:tag,ids:[word]})).status,200);
+ assert.equal((await (await call(`/api/wordbook?category=${category}&tag=${tag}`,'alice')).json()).words.length,0);
+ console.log('PASS: migrations, admin/member permissions, CSRF, XLSX template/import, row errors and atomic rejection, duplicate checks, daily publication and future hiding, upload timestamps, private tags, idempotent batch tagging, filtering and removal.');
+}finally{if(mf)await mf.dispose();await rm(scratch,{recursive:true,force:true});}
