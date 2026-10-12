@@ -16,5 +16,5 @@ export function BrandProvider({ children }: { children: React.ReactNode }) {
 }
 export function SiteBrand() {
   const brand = useContext(BrandContext);
-  return <><span className="grid size-9 shrink-0 place-items-center overflow-hidden rounded-xl bg-[#193440] text-white"><img src={brand.logoUrl || "/site-logo.png"} alt="网站 Logo" className="size-full object-contain" /></span><span className="min-w-0 max-w-40 break-words font-bold"><span className="hidden sm:inline">{brand.desktopTitle}</span><span className="sm:hidden">{brand.mobileTitle}</span></span></>;
+  return <><span className="grid size-9 shrink-0 place-items-center overflow-hidden rounded-xl bg-[#303236] text-white"><img src={brand.logoUrl || "/site-logo.png"} alt="网站 Logo" className="size-full object-contain" /></span><span className="min-w-0 max-w-40 break-words font-bold"><span className="hidden sm:inline">{brand.desktopTitle}</span><span className="sm:hidden">{brand.mobileTitle}</span></span></>;
 }

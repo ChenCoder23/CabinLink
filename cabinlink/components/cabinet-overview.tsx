@@ -1,19 +1,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowRight, LoaderCircle } from "lucide-react";
+import { Archive, ArrowRight, LoaderCircle } from "lucide-react";
 
-type Cabinet = { id: string; name: string; theme_count: number };
+type Cabinet = { id: string; name: string; theme_count: number; cover_file_id: string | null };
 type CabinetLists = { created: Cabinet[]; joined: Cabinet[] };
 
+function CabinetCover({ fileId }: { fileId: string | null }) {
+  const [failedFileId, setFailedFileId] = useState<string | null>(null);
+  return <span className="cabinet-cover relative grid size-12 shrink-0 place-items-center overflow-hidden rounded-xl bg-[#e9e7e3] text-[#737873]">
+    <Archive className="size-6" aria-hidden="true" />
+    {fileId && failedFileId !== fileId && <img src={`/api/files/${encodeURIComponent(fileId)}?inline=1`} alt="" loading="lazy" className="absolute inset-0 size-full object-cover" onError={() => setFailedFileId(fileId)} />}
+  </span>;
+}
+
 function CabinetSection({ title, cabinets }: { title: string; cabinets: Cabinet[] }) {
-  return <section className="mt-8">
-    <h2 className="text-base font-bold text-[#193440]">{title}</h2>
-    <div className="mt-3 overflow-hidden rounded-2xl border border-[#e2eae8] bg-white">
-      {cabinets.length ? cabinets.map((cabinet, index) => <a key={cabinet.id} href={`/my/cabinets/${encodeURIComponent(cabinet.id)}`} className={`flex min-h-16 items-center justify-between gap-4 px-4 py-3 transition hover:bg-[#f7faf9] ${index ? "border-t border-[#edf1f0]" : ""}`}>
-        <span className="min-w-0"><span className="block truncate font-semibold text-[#193440]">{cabinet.name}</span><span className="mt-0.5 block text-xs text-[#87979b]">{cabinet.theme_count} 个主题</span></span>
-        <ArrowRight className="size-4 shrink-0 text-[#8aa09f]" />
-      </a>) : <p className="px-4 py-5 text-sm text-[#8a9a9d]">暂无智能柜</p>}
+  return <section className="cabinet-collection mt-8">
+    <h2 className="text-base font-bold text-[#303236]">{title}</h2>
+    <div className="cabinet-collection-grid mt-3 overflow-hidden rounded-2xl border border-[#d4d2cd] bg-white">
+      {cabinets.length ? cabinets.map((cabinet, index) => <a key={cabinet.id} href={`/my/cabinets/${encodeURIComponent(cabinet.id)}`} className={`cabinet-tile flex min-h-16 items-center justify-between gap-4 px-4 py-3 transition hover:bg-[#f7faf9] ${index ? "border-t border-[#edf1f0]" : ""}`}>
+        <CabinetCover fileId={cabinet.cover_file_id} />
+        <span className="min-w-0 flex-1"><span className="block truncate font-semibold text-[#303236]">{cabinet.name}</span><span className="mt-0.5 block text-xs text-[#666965]">{cabinet.theme_count} 个主题</span></span>
+        <ArrowRight className="size-4 shrink-0 text-[#737873]" />
+      </a>) : <p className="px-4 py-5 text-sm text-[#666965]">暂无智能柜</p>}
     </div>
   </section>;
 }
