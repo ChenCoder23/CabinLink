@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @next/next/no-html-link-for-pages -- Native navigation avoids Vinext production RSC prefetch failures. */
 import CabinetLinksButton from "@/components/cabinet-links-button";
 import SiteSettingsPanel from "@/components/site-settings-panel";
 import { LayoutDashboard, Users, Archive, ScrollText, Settings, ArrowUpRight, RefreshCw, ShieldCheck, ChevronRight } from "lucide-react";
