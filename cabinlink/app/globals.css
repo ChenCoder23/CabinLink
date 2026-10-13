@@ -242,6 +242,9 @@ html[data-theme="light"] .admin-nav-item.is-active,html[data-theme="dark"] .admi
 html:is([data-theme="light"],[data-theme="dark"]) :is([class*="text-teal"],.admin-shortcuts svg,.admin-shortcuts span) {color:var(--ink)!important;}
 html:is([data-theme="light"],[data-theme="dark"]) :is([class*="bg-teal"],.admin-welcome) {background:linear-gradient(125deg,#17191d,#52565d)!important;color:white;}
 input[type="checkbox"] {accent-color:var(--ink);}
+html[data-theme="dark"] :is(.admin-brand,.admin-brand strong,.admin-topbar strong,.admin-topbar a) {color:var(--ink)!important;}
+html[data-theme="dark"] :is(.admin-brand-sub,.admin-sidebar-bottom small,.admin-topbar) {color:var(--muted-ink)!important;}
+.glass-panel input[type="file"],.glass-panel form>label {max-width:100%;min-width:0;}
 
 @media (max-width: 639px) {
   .site-footer { padding-top: 1rem; padding-bottom: calc(1rem + env(safe-area-inset-bottom)); }
