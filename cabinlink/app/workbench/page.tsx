@@ -27,8 +27,11 @@ export default function Workbench() {
     }; if (!r.ok) {
         setError(b.error);
         return;
-    } setLoaded(true); setTasks(b.tasks); setIntroduction(b.profile.introduction); const unseen = b.tasks.find((t: Task) => t.progress === 100 && t.celebration > t.seen); if (unseen)
-        setPoster(unseen); }
+    } setLoaded(true); setTasks(b.tasks); setIntroduction(b.profile.introduction); const unseen = b.tasks.find((t: Task) => t.progress === 100 && t.celebration > t.seen); if (unseen) {
+        // Persist display before opening so a reload cannot repeat the celebration.
+        const seen=await fetch('/api/workbench',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'seen',id:unseen.id})});
+        if(seen.ok)setPoster(unseen);
+    } }
     useEffect(() => { const timer = setTimeout(() => void load(), 0); return () => clearTimeout(timer); }, []);
     async function action(body: object) { const r = await fetch('/api/workbench', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); const b = await r.json() as {
         error: string;
