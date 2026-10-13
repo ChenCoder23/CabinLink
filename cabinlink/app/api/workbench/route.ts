@@ -11,7 +11,7 @@ export async function GET(r: Request) {
         return jsonError("页面不存在", 404);
     await initializeWorkbench(user.id);
     const { db } = requireStorage();
-    return Response.json({ profile: await db.prepare("SELECT introduction FROM workbench_profile WHERE user_id=?").bind(user.id).first(), tasks: (await db.prepare("SELECT * FROM workbench_tasks WHERE user_id=? ORDER BY sort_order,id").bind(user.id).all()).results }, { headers });
+    return Response.json({ profile: await db.prepare("SELECT * FROM workbench_profile WHERE user_id=?").bind(user.id).first(), tasks: (await db.prepare("SELECT * FROM workbench_tasks WHERE user_id=? ORDER BY sort_order,id").bind(user.id).all()).results }, { headers });
 }
 export async function POST(r: Request) {
     if (!sameOrigin(r))
@@ -32,9 +32,19 @@ export async function POST(r: Request) {
         progress: number;
         sort_order: number;
         focus: boolean;
+        hero_title: string;
+        hero_description: string;
+        hero_background: string;
     };
     const { db } = requireStorage();
-    if (b.action === 'profile') {
+    if (b.action === 'banner') {
+        const old = await db.prepare('SELECT hero_background FROM workbench_profile WHERE user_id=?').bind(user.id).first<{hero_background:string}>();
+        if (!old || typeof b.hero_title !== 'string' || !b.hero_title.trim() || b.hero_title.length > 100 || typeof b.hero_description !== 'string' || b.hero_description.length > 500 || typeof b.hero_background !== 'string' || !(validImage(b.hero_background) || (b.hero_background === old.hero_background && /^\/api\/images\/workbench\/[a-f0-9-]{36}$/.test(b.hero_background)))) return jsonError('横幅信息无效');
+        const image = await storeImage(b.hero_background, 'workbench');
+        await db.prepare('UPDATE workbench_profile SET hero_title=?,hero_description=?,hero_background=? WHERE user_id=?').bind(b.hero_title.trim(),b.hero_description,image,user.id).run();
+        if (old.hero_background !== image) await deleteUnusedImage(old.hero_background);
+    }
+    else if (b.action === 'profile') {
         if (typeof b.introduction !== 'string' || b.introduction.length > 20000)
             return jsonError('介绍最多20000字');
         await db.prepare('UPDATE workbench_profile SET introduction=? WHERE user_id=?').bind(b.introduction, user.id).run();

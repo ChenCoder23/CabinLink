@@ -6,7 +6,7 @@ export function UserAvatar({ user }: {
     user: AuthUser;
 }) { let hash = 0; for (const c of user.id)
     hash = (hash * 31 + c.charCodeAt(0)) >>> 0; return user.avatar_url ? <img className="user-avatar" src={user.avatar_url} alt="用户头像"/> : <span className="user-avatar" style={{ background: `hsl(${hash % 360} 25% 42%)`, color: "white" }} aria-label="默认头像">{(user.username || user.email || "U").slice(0, 1).toUpperCase()}</span>; }
-export function QuotaNotice() { const [data, setData] = useState<{
+export function QuotaNotice({dashboard=false}:{dashboard?:boolean}={}) { const [data, setData] = useState<{
     used: number;
     reserved: number;
     limit: number | null;
@@ -14,7 +14,7 @@ export function QuotaNotice() { const [data, setData] = useState<{
     used: number;
     reserved: number;
     limit: number | null;
-}> : null).then(setData).catch(() => { }); }, []); return data?.limit ? <p className="glass-panel my-4 p-3 text-sm">未绑定邮箱 · 已用 {(data.used / 1048576).toFixed(1)} / 200 MiB · 剩余 {Math.max(0, (data.limit - data.used - data.reserved) / 1048576).toFixed(1)} MiB <a href="/settings" className="underline">绑定邮箱提升额度</a></p> : null; }
+}> : null).then(setData).catch(() => { }); }, []); if(dashboard&&data) return <div className="storage-details"><p>已用 {(data.used/1048576).toFixed(1)} MiB / {data.limit?'总容量 200 MiB':'沿用智能柜容量规则'}</p>{data.limit&&<><progress aria-label="存储使用量" max={data.limit} value={Math.min(data.used+data.reserved,data.limit)}/><small>剩余 {Math.max(0,(data.limit-data.used-data.reserved)/1048576).toFixed(1)} MiB</small><div className="storage-bind"><span>未绑定邮箱</span><a href="/settings">绑定邮箱 · 提升额度</a></div></>}</div>; return data?.limit ? <p className="glass-panel my-4 p-3 text-sm">未绑定邮箱 · 已用 {(data.used / 1048576).toFixed(1)} / 200 MiB · 剩余 {Math.max(0, (data.limit - data.used - data.reserved) / 1048576).toFixed(1)} MiB <a href="/settings" className="underline">绑定邮箱提升额度</a></p> : null; }
 async function save(body: object) { const r = await fetch('/api/personal', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); const b = await r.json() as {
     error: string;
     relogin?: boolean;

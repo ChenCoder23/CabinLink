@@ -8,7 +8,7 @@ export async function GET(r: Request, { params }: {
     }>;
 }) {
     const { kind, id } = await params;
-    if (!['avatar', 'banner', 'poster'].includes(kind) || !/^[a-f0-9-]{36}$/.test(id))
+    if (!['avatar', 'banner', 'poster', 'workbench'].includes(kind) || !/^[a-f0-9-]{36}$/.test(id))
         return new Response(null, { status: 404 });
     const { db, bucket } = requireStorage();
     const url = `/api/images/${kind}/${id}`;
@@ -16,9 +16,9 @@ export async function GET(r: Request, { params }: {
     if (kind === 'banner')
         visible = !!await db.prepare('SELECT id FROM site_settings WHERE hero_background=? AND id=1').bind(url).first();
     else {
-        const user = kind === 'poster' ? await workbenchUser(r) : await sessionUser(r);
+        const user = kind === 'poster' || kind === 'workbench' ? await workbenchUser(r) : await sessionUser(r);
         if (user)
-            visible = kind === 'poster' ? !!await db.prepare('SELECT id FROM workbench_tasks WHERE user_id=? AND poster=? LIMIT 1').bind(user.id, url).first() : !!await db.prepare('SELECT id FROM users WHERE id=? AND avatar_url=?').bind(user.id, url).first();
+            visible = kind === 'workbench' ? !!await db.prepare('SELECT user_id FROM workbench_profile WHERE user_id=? AND hero_background=?').bind(user.id,url).first() : kind === 'poster' ? !!await db.prepare('SELECT id FROM workbench_tasks WHERE user_id=? AND poster=? LIMIT 1').bind(user.id, url).first() : !!await db.prepare('SELECT id FROM users WHERE id=? AND avatar_url=?').bind(user.id, url).first();
     }
     if (!visible)
         return new Response(null, { status: 404, headers: { 'Cache-Control': 'no-store' } });

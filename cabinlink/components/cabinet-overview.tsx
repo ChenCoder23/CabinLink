@@ -27,7 +27,8 @@ function CabinetSection({ title, cabinets }: { title: string; cabinets: Cabinet[
   </section>;
 }
 
-export function CabinetOverview({ refreshKey = 0 }: { refreshKey?: number }) {
+export function CabinetOverview({ refreshKey = 0, dashboard=false, query="", onCreate, onJoin }: { refreshKey?: number; dashboard?:boolean; query?:string; onCreate?:()=>void; onJoin?:()=>void }) {
+  const [tab,setTab]=useState("all");
   const [lists, setLists] = useState<CabinetLists | null>(null);
   const [error, setError] = useState("");
   useEffect(() => {
@@ -42,5 +43,6 @@ export function CabinetOverview({ refreshKey = 0 }: { refreshKey?: number }) {
   }, [refreshKey]);
   if (error) return <p className="mt-8 text-sm text-[#a44444]">{error}</p>;
   if (!lists) return <div className="mt-10 flex justify-center"><LoaderCircle className="size-5 animate-spin text-[#6b938b]" /></div>;
+  if (dashboard) { const all=Array.from(new Map([...lists.created,...lists.joined].map(c=>[c.id,c])).values());const selected=(tab==='created'?lists.created:tab==='joined'?lists.joined:all).filter(c=>c.name.toLowerCase().includes(query.toLowerCase()));return <><div className="space-tabs">{[['all','全部'],['created','我创建的'],['joined','我加入的']].map(([id,label])=><button key={id} aria-pressed={tab===id} onClick={()=>setTab(id)}>{label}</button>)}</div>{selected.length?<CabinetSection title="" cabinets={selected}/>:<div className="cabinet-empty"><Archive size={86} strokeWidth={1}/><h3>{query?'没有匹配的智能柜':'开启你的第一个智能柜'}</h3><p>{query?'试试其他名称。':'为照片、文件和共同回忆，留一个专属空间。'}</p>{!query&&<><button className="space-primary" onClick={onCreate}>＋ 创建智能柜</button><button className="empty-join" onClick={onJoin}>使用邀请链接加入 →</button></>}</div>}</>; }
   return <><CabinetSection title="我创建的" cabinets={lists.created} /><CabinetSection title="我加入的" cabinets={lists.joined} /></>;
 }
