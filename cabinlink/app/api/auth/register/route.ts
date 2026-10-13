@@ -6,7 +6,7 @@ export async function POST(request: Request) {
   try {
     const payload = await request.json() as { username?: unknown; password?: unknown };
     if (!validUsername(payload.username)) return jsonError("账号需为 3–32 位中文、字母、数字、下划线或短横线。");
-    if (!validPassword(payload.password)) return jsonError("密码长度需为 6–128 位。");
+    if (!validPassword(payload.password)) return jsonError("密码须为 8–128 位，同时包含英文字母和数字。");
     const username = payload.username as string; const password = payload.password as string;
     const { db } = requireStorage();
     const existing = await db.prepare("SELECT id FROM users WHERE username = ?").bind(username).first();

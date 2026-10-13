@@ -1,11 +1,11 @@
-import { createSession, passwordHash, sameOrigin, sessionCookie, validPassword, validUsername } from "@/lib/auth-server";
+import { createSession, passwordHash, sameOrigin, sessionCookie, validUsername } from "@/lib/auth-server";
 import { jsonError, requireStorage } from "@/lib/cabinet-server";
 
 export async function POST(request: Request) {
   if (!sameOrigin(request)) return jsonError("请求来源无效。", 403);
   try {
     const payload = await request.json() as { username?: unknown; password?: unknown };
-    if (!validUsername(payload.username) || !validPassword(payload.password)) return jsonError("账号或密码不正确。", 401);
+    if (!validUsername(payload.username) || !(typeof payload.password === "string" && payload.password.length >= 6 && payload.password.length <= 128)) return jsonError("账号或密码不正确。", 401);
     const username = payload.username as string; const password = payload.password as string;
     const { db } = requireStorage(); const now = new Date().toISOString();
     const attempts = await db.prepare("SELECT attempts, window_started_at FROM login_attempts WHERE username = ?").bind(username).first<{ attempts: number; window_started_at: string }>();

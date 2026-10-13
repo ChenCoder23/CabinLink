@@ -5,7 +5,7 @@ import { ArrowRight, KeyRound, Mail } from "lucide-react";
 import { SiteBrand } from "@/components/site-brand";
 import { toast } from "sonner";
 
-export type AuthUser = { role?: "user" | "admin"; id: string; username: string | null; email: string | null };
+export type AuthUser = { role?: "user" | "admin"; avatar_url?: string; canWorkbench?: boolean; id: string; username: string | null; email: string | null };
 type Mode = "login" | "register" | "email";
 
 async function post(url: string, payload: object): Promise<{ user: AuthUser }> {
@@ -63,7 +63,7 @@ export function AuthPanel({ onAuthenticated }: { onAuthenticated: (user: AuthUse
         <p className="text-sm leading-6 text-[#617b82]">首次验证邮箱会自动创建账号。登录后可设置账号和密码。</p>
       </form> : <form onSubmit={submitCredentials} className="mt-6 grid gap-4">
         <label className="grid gap-2 text-sm font-semibold">账号<input required autoComplete="username" value={username} onChange={(event) => setUsername(event.target.value)} maxLength={32} placeholder="3–32 位中文、字母或数字" className="rounded-xl border border-[#cbdad8] px-4 py-3 text-base font-normal outline-none focus:border-[#565b59]" /></label>
-        <label className="grid gap-2 text-sm font-semibold">密码<input required type="password" autoComplete={mode === "register" ? "new-password" : "current-password"} value={password} onChange={(event) => setPassword(event.target.value)} minLength={6} maxLength={128} placeholder="至少 6 位" className="rounded-xl border border-[#cbdad8] px-4 py-3 text-base font-normal outline-none focus:border-[#565b59]" /></label>
+        <label className="grid gap-2 text-sm font-semibold">密码<input required type="password" autoComplete={mode === "register" ? "new-password" : "current-password"} value={password} onChange={(event) => setPassword(event.target.value)} minLength={mode === "register" ? 8 : 6} maxLength={128} placeholder={mode === "register" ? "至少 8 位，同时含字母和数字" : "请输入密码"} className="rounded-xl border border-[#cbdad8] px-4 py-3 text-base font-normal outline-none focus:border-[#565b59]" /></label>
         <button disabled={busy} className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#303236] px-4 py-3 font-semibold text-white disabled:opacity-50"><KeyRound className="size-4" />{busy ? "请稍候…" : mode === "register" ? "创建账号并登录" : "登录"}<ArrowRight className="size-4" /></button>
       </form>}
     </div>

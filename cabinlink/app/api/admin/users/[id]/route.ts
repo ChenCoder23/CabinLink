@@ -13,7 +13,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
     const now = new Date().toISOString(); const statements: D1PreparedStatement[] = []; let detail = "";
     switch(body.action) {
       case "password": {
-        if (!validPassword(body.password)) return jsonError("密码须为 6–128 个字符。");
+        if (!validPassword(body.password)) return jsonError("密码须为 8–128 位，同时包含英文字母和数字。");
         const salt = newToken(); const digest = await passwordHash(body.password as string,salt);
         statements.push(db.prepare("UPDATE users SET password_salt=?,password_hash=? WHERE id=? AND role='user'").bind(salt,digest,id)); break;
       }

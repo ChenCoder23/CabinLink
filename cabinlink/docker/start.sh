@@ -30,4 +30,4 @@ else
 fi
 rm -f "$migration_log"
 
-exec node ../../node_modules/wrangler/bin/wrangler.js dev --local --config wrangler.json --persist-to /data --ip 0.0.0.0 --port 80
+exec node ../../scripts/start-production.mjs

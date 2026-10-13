@@ -48,7 +48,11 @@ try {
   assert.equal((await call('/settings', 'admin', 'PUT', { ...brand, logoUrl: 'javascript:alert(1)' })).status, 400);
   assert.equal((await call('/settings', 'admin', 'PUT', { ...brand, mobileTitle: '' })).status, 400);
   assert.equal((await call('/settings', 'admin', 'PUT', brand)).status, 200);
-  assert.deepEqual(await (await call('/settings', undefined, 'GET')).json(), { ...brand, canManage: false });
+  const banner={heroTitle:'把美好，收进同一个柜子。',heroDescription:'整理照片、收藏文件，用一个链接连接彼此。',heroBackground:''};
+  assert.deepEqual(await (await call('/settings', undefined, 'GET')).json(), { ...brand,...banner, canManage: false });
+  assert.equal((await call('/settings','admin','PUT',{...brand,...banner,heroTitle:'我的空间',heroDescription:'自定义说明'})).status,200);
+  assert.equal((await (await call('/settings',undefined,'GET')).json()).heroTitle,'我的空间');
+  assert.equal((await call('/settings','admin','PUT',{...brand,...banner,heroBackground:'javascript:bad'})).status,400);
   await db.prepare('UPDATE cabinets SET closed_at=? WHERE id=?').bind(now, 'legacy').run();
   assert.equal((await call('/legacy', 'admin')).status, 403);
   assert.equal(await (await call('/resolve/' + new URL(recovered.adminUrl).pathname.split('/').pop(), undefined, 'GET')).json(), null);

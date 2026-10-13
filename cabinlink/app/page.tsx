@@ -1,9 +1,11 @@
+/* eslint-disable @next/next/no-html-link-for-pages -- Native navigation avoids Vinext RSC link errors. */
 "use client";
-import { SiteBrand } from "@/components/site-brand";
+import { UserAvatar, QuotaNotice } from "@/components/personal-settings";
+import { useBrand, SiteBrand } from "@/components/site-brand";
 
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+
+
 import { ArrowRight, Copy, LoaderCircle, LogOut, Plus, Settings2 } from "lucide-react";
 import { toast } from "sonner";
 import { AuthPanel, type AuthUser } from "@/components/auth-panel";
@@ -21,7 +23,8 @@ type CreatedCabinet = { shareUrl: string; adminUrl: string; cabinet: { name: str
 type ActiveForm = "create" | "join" | null;
 
 export default function Home() {
-  const router = useRouter();
+
+  const brand = useBrand() as ReturnType<typeof useBrand> & {heroTitle?:string;heroDescription?:string;heroBackground?:string};
   const [user, setUser] = useState<AuthUser | null>(null);
   const [checkingSession, setCheckingSession] = useState(true);
   const [activeForm, setActiveForm] = useState<ActiveForm>(null);
@@ -95,19 +98,19 @@ export default function Home() {
       const body = await response.json() as { error?: string; cabinet?: { id: string } };
       if (response.status === 401) { setUser(null); throw new Error("请重新登录"); }
       if (!response.ok || !body.cabinet) throw new Error(body.error || "加入失败");
-      router.push(target.pathname);
+      window.location.href=target.pathname;
     } catch (error) { toast.error(error instanceof Error ? error.message : "加入失败"); setBusy(false); }
   }
 
   if (checkingSession) return <main className="grid min-h-screen place-items-center bg-[#e9e7e3]"><LoaderCircle className="size-6 animate-spin text-[#6b938b]" /></main>;
-  if (!user) return <AuthPanel onAuthenticated={setUser} />;
+  if (!user) return <AuthPanel onAuthenticated={(signedIn)=>{setUser(signedIn);void fetch('/api/auth/session').then(r=>r.json() as Promise<{user:AuthUser}>).then(b=>setUser(b.user)).catch(()=>{});}} />;
 
   return <main className="home-shell min-h-screen bg-[#e9e7e3] text-[#303236]"><div className="mx-auto max-w-xl px-5 pb-12 pt-7 sm:pt-12">
     <header className="flex items-center justify-between gap-3">
-      <Link href="/" className="flex items-center gap-2.5"><SiteBrand /></Link>
-      <div className="flex min-w-0 flex-wrap items-center justify-end gap-2"><a href="/wordbook" className="rounded-lg border px-3 py-2 text-sm">单词本</a><span className="max-w-24 truncate text-sm text-[#666965] sm:max-w-40">{user.username || user.email}</span>{user?.role === "admin" && <Link href="/admin" className="rounded-lg border px-3 py-2 text-sm">管理后台</Link>}<Link href="/settings" aria-label="账号设置" className="grid size-10 place-items-center rounded-xl text-[#667f82] hover:bg-white"><Settings2 className="size-4" /></Link><button onClick={() => void logout()} aria-label="退出登录" className="grid size-10 place-items-center rounded-xl text-[#667f82] hover:bg-white"><LogOut className="size-4" /></button></div>
+      <a href="/" className="flex items-center gap-2.5"><SiteBrand /></a>
+      <div className="flex min-w-0 flex-wrap items-center justify-end gap-2"><a href="/wordbook" className="rounded-lg border px-3 py-2 text-sm">单词本</a><UserAvatar user={user}/>{user.canWorkbench && <a href="/workbench" className="rounded-lg border px-3 py-2 text-sm">个人工作台</a>}<span className="max-w-24 truncate text-sm text-[#666965] sm:max-w-40">{user.username || user.email}</span>{user?.role === "admin" && <a href="/admin" className="rounded-lg border px-3 py-2 text-sm">管理后台</a>}<a href="/settings" aria-label="账号设置" className="grid size-10 place-items-center rounded-xl text-[#667f82] hover:bg-white"><Settings2 className="size-4" /></a><button onClick={() => void logout()} aria-label="退出登录" className="grid size-10 place-items-center rounded-xl text-[#667f82] hover:bg-white"><LogOut className="size-4" /></button></div>
     </header>
-    <section className="home-hero"><p className="home-eyebrow">YOUR PERSONAL SPACE</p><h1>把美好，收进同一个柜子。</h1><p>整理照片、收藏文件，用一个链接连接彼此。</p><span className="home-hero-mark" aria-hidden="true"><Plus strokeWidth={1} /></span></section><h2 className="mt-8 text-xl font-bold tracking-tight">我的智能柜</h2>
+    <section className="home-hero" style={brand.heroBackground?{backgroundImage:`linear-gradient(#0006,#0006),url(${brand.heroBackground})`,backgroundSize:"cover",backgroundPosition:"center"}:{}}><p className="home-eyebrow">YOUR PERSONAL SPACE</p><h1>{brand.heroTitle || "把美好，收进同一个柜子。"}</h1><p>{brand.heroDescription || "整理照片、收藏文件，用一个链接连接彼此。"}</p><span className="home-hero-mark" aria-hidden="true"><Plus strokeWidth={1} /></span></section><a href="/wordbook" className="wordbook-poster"><span>DAILY VOCABULARY</span><h2>每天一点，离目标更近。</h2><p>打开单词本 · 今日单词与个人标记 →</p></a><QuotaNotice/><h2 className="mt-8 text-xl font-bold tracking-tight">我的智能柜</h2>
     <div className="mt-6 grid grid-cols-2 gap-3">
       <button onClick={() => { setActiveForm(activeForm === "create" ? null : "create"); setCreated(null); }} className="flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-[#303236] px-3 text-sm font-semibold text-white"><Plus className="size-4" />创建智能柜</button>
       <button onClick={() => { setActiveForm(activeForm === "join" ? null : "join"); setCreated(null); }} className="flex min-h-14 items-center justify-center gap-2 rounded-2xl border border-[#d4d2cd] bg-white px-3 text-sm font-semibold text-[#303236]"><ArrowRight className="size-4" />加入智能柜</button>

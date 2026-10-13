@@ -1,0 +1,55 @@
+import { validImage } from "@/lib/image-validation";
+import { workbenchUser } from "@/lib/personal-server";
+import { initializeWorkbench } from "@/lib/workbench-server";
+import { requireStorage, jsonError } from "@/lib/cabinet-server";
+import { sameOrigin } from "@/lib/auth-server";
+const headers = { "Cache-Control": "private, no-store" };
+export async function GET(r: Request) { const user = await workbenchUser(r); if (!user)
+    return jsonError("页面不存在", 404); await initializeWorkbench(user.id); const { db } = requireStorage(); return Response.json({ profile: await db.prepare("SELECT introduction FROM workbench_profile WHERE user_id=?").bind(user.id).first(), tasks: (await db.prepare("SELECT * FROM workbench_tasks WHERE user_id=? ORDER BY sort_order,id").bind(user.id).all()).results }, { headers }); }
+export async function POST(r: Request) {
+    if (!sameOrigin(r))
+        return jsonError("请求来源无效", 403);
+    const user = await workbenchUser(r);
+    if (!user)
+        return jsonError("页面不存在", 404);
+    const b = await r.json() as {
+        action: string;
+        id: string;
+        introduction: string;
+        kind: string;
+        title: string;
+        description: string;
+        criteria: string;
+        due_date: string;
+        poster: string;
+        progress: number;
+        sort_order: number;
+        focus: boolean;
+    };
+    const { db } = requireStorage();
+    if (b.action === 'profile') {
+        if (typeof b.introduction !== 'string' || b.introduction.length > 20000)
+            return jsonError('介绍最多20000字');
+        await db.prepare('UPDATE workbench_profile SET introduction=? WHERE user_id=?').bind(b.introduction, user.id).run();
+    }
+    else if (b.action === 'seen') {
+        await db.prepare('UPDATE workbench_tasks SET seen=celebration WHERE id=? AND user_id=?').bind(b.id, user.id).run();
+    }
+    else if (b.action === 'delete') {
+        await db.prepare('DELETE FROM workbench_tasks WHERE id=? AND user_id=?').bind(b.id, user.id).run();
+    }
+    else if (b.action === 'save') {
+        if (!['main', 'side', 'long'].includes(b.kind) || typeof b.title !== 'string' || !b.title.trim() || b.title.length > 150 || !Number.isInteger(b.progress) || b.progress < 0 || b.progress > 100 || !Number.isInteger(b.sort_order) || typeof b.focus !== 'boolean' || typeof b.description !== 'string' || b.description.length > 5000 || typeof b.criteria !== 'string' || b.criteria.length > 2000 || typeof b.due_date !== 'string' || (b.due_date && !/^\d{4}-\d{2}-\d{2}$/.test(b.due_date)) || !validImage(b.poster))
+            return jsonError('任务信息无效');
+        const id = b.id || crypto.randomUUID();
+        const old = await db.prepare('SELECT id FROM workbench_tasks WHERE id=? AND user_id=?').bind(id, user.id).first();
+        if (b.id && !old)
+            return jsonError('任务不存在', 404);
+        const result = await db.prepare(`INSERT INTO workbench_tasks(id,user_id,kind,title,description,due_date,criteria,progress,sort_order,focus,poster,celebration) SELECT ?,?,?,?,?,?,?,?,?,?,?,? WHERE ?=0 OR (SELECT COUNT(*) FROM workbench_tasks WHERE user_id=? AND focus=1 AND id!=?)<3 ON CONFLICT(id) DO UPDATE SET kind=excluded.kind,title=excluded.title,description=excluded.description,due_date=excluded.due_date,criteria=excluded.criteria,progress=excluded.progress,sort_order=excluded.sort_order,focus=excluded.focus,poster=excluded.poster,celebration=CASE WHEN excluded.progress=100 AND workbench_tasks.progress<100 THEN workbench_tasks.celebration+1 ELSE workbench_tasks.celebration END`).bind(id, user.id, b.kind, b.title.trim(), b.description, b.due_date, b.criteria, b.progress, b.sort_order, b.focus ? 1 : 0, b.poster, b.progress === 100 ? 1 : 0, b.focus ? 1 : 0, user.id, id).run();
+        if (!result.meta.changes)
+            return jsonError('今日重点最多三项');
+    }
+    else
+        return jsonError('未知操作');
+    return Response.json({ ok: true }, { headers });
+}

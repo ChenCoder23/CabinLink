@@ -200,6 +200,45 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   font-weight: 700;
 }
 
+/* Shared glass surfaces and monochrome themes. */
+:root { --glass: #ffffff85; --glass-border: #ffffffb0; --ink: #303236; --muted-ink: #59635e; --page: radial-gradient(ellipse at 90% 15%,#cbd5cf,transparent 55%),linear-gradient(125deg,#f1efe9,#d7dad4); }
+html[data-theme="light"] { --glass:#ffffffa6; --glass-border:#ffffffde; --ink:#161719; --muted-ink:#55565b; --page:radial-gradient(ellipse at 90% 0%,#d8d8dc,transparent 60%),linear-gradient(135deg,#f6f6f7,#dedee2); color-scheme:light; }
+html[data-theme="dark"] { --glass:#222329a3; --glass-border:#ffffff24; --ink:#f2f2f4; --muted-ink:#b6b7be; --page:radial-gradient(ellipse at 90% 0%,#34363e,transparent 60%),linear-gradient(135deg,#111216,#24252b); color-scheme:dark; }
+body { background:var(--page); background-attachment:fixed; color:var(--ink); }
+body main { background-color:transparent!important; color:var(--ink); }
+.glass-panel, body main section[class*="border"],body main aside,body main article[class*="border"],.home-shell>div,.admin-shell,.admin-main>section { background:var(--glass)!important; border:1px solid var(--glass-border)!important; border-radius:24px; backdrop-filter:blur(32px) saturate(125%); -webkit-backdrop-filter:blur(32px) saturate(125%); box-shadow:0 18px 48px #0000000d; }
+html[data-theme="dark"] body main [class*="bg-white"],html[data-theme="dark"] .admin-sidebar,html[data-theme="dark"] .admin-topbar { background-color:var(--glass)!important; color:var(--ink); border-color:var(--glass-border); }
+html[data-theme="dark"] body main [class*="text-slate"],html[data-theme="dark"] body main [class*="text-[#"],html[data-theme="dark"] .site-footer,html[data-theme="dark"] .site-footer-label { color:var(--muted-ink)!important; }
+html[data-theme="dark"] body main h1,html[data-theme="dark"] body main h2,html[data-theme="dark"] body main h3 { color:var(--ink)!important; }
+html[data-theme="light"] .home-hero { background:linear-gradient(125deg,#161719,#56565c); }
+html[data-theme="dark"] .home-hero { border:1px solid #ffffff30; background:linear-gradient(125deg,#101114,#3b3d43); }
+.theme-control { position:relative; z-index:30; display:flex; justify-content:flex-end; align-items:center; gap:8px; padding:10px 20px; font-size:12px; background:var(--glass); backdrop-filter:blur(24px); border-bottom:1px solid var(--glass-border); }
+input:not([type="checkbox"]):not([type="range"]):not([type="file"]):not([type="color"]),textarea,select { background:var(--glass); color:var(--ink); border:1px solid var(--glass-border); border-radius:10px; padding:8px 12px; max-width:100%; }
+.glass-panel label>input:not([type="checkbox"]):not([type="range"]):not([type="file"]) { display:block; width:100%; }
+.glass-panel button,.modal-panel button { padding:8px 12px; border:1px solid var(--glass-border); border-radius:10px; }
+.user-avatar { display:inline-grid; place-items:center; width:36px; height:36px; border-radius:50%; object-fit:cover; flex-shrink:0; }
+.avatar-crop { width:200px; height:200px; background-repeat:no-repeat; border:1px solid var(--glass-border); }
+.wordbook-poster { display:block; margin-top:24px; padding:32px; border-radius:24px; background:linear-gradient(90deg,#f7f5efef,#f7f5ef33),url('/wordbook-background.png') center/cover; color:#22242b!important; border:1px solid #ffffffa0; }
+.wordbook-poster span { font-size:10px; letter-spacing:3px; }.wordbook-poster h2 { font-size:24px; font-weight:700; margin:12px 0; }
+html[data-theme="dark"] .wordbook-poster { background-image:linear-gradient(90deg,#111217ef,#11121755),url('/wordbook-background.png');color:#f5f5f7!important; }
+.modal-backdrop { position:fixed; inset:0; z-index:100; display:grid; place-items:center; padding:20px; background:#0008; backdrop-filter:blur(12px); }
+.modal-panel { width:min(100%,600px); max-height:90vh; overflow:auto; padding:24px; display:grid; gap:12px; background:var(--glass); }
+.milestone-poster { width:min(100%,600px); min-height:420px; padding:40px; border-radius:28px; color:white; background:radial-gradient(circle at 90% 0%,#777b86,transparent 65%),linear-gradient(130deg,#171a21,#414754); background-size:cover; background-position:center; box-shadow:0 30px 100px #0008; animation:milestone-in .5s ease-out; }
+@keyframes milestone-in { from { opacity:0; transform:translateY(25px) scale(.96); } to { opacity:1; transform:none; } }
+@media(max-width:639px){.wordbook-poster{padding:24px 20px}.milestone-poster{padding:24px}.theme-control{padding:8px 12px}}
+@media(prefers-reduced-motion:reduce){.milestone-poster{animation:none}}
+
+progress { height:8px; border:0; border-radius:999px; overflow:hidden; appearance:none; background:#8883; }
+progress::-webkit-progress-bar { background:#8883; border-radius:999px; }
+progress::-webkit-progress-value { background:var(--ink); border-radius:999px; }
+progress::-moz-progress-bar { background:var(--ink); }
+html[data-theme="dark"] .admin-content,html[data-theme="dark"] .admin-content td,html[data-theme="dark"] .admin-content p,html[data-theme="dark"] .admin-content h1,html[data-theme="dark"] .admin-content h2,html[data-theme="dark"] .admin-content strong,html[data-theme="dark"] .admin-content section.grid>div p:last-child {color:var(--ink)!important;}
+html[data-theme="dark"] .admin-content th,html[data-theme="dark"] .admin-content input,html[data-theme="dark"] .admin-refresh,html[data-theme="dark"] .admin-shortcuts a,html[data-theme="dark"] .admin-content section.grid>div {background:var(--glass)!important;color:var(--ink)!important;border-color:var(--glass-border)!important;}
+html[data-theme="dark"] .admin-content tbody tr:hover {background:#ffffff0a;}
+html[data-theme="light"] .admin-sidebar,html[data-theme="dark"] .admin-sidebar {background:var(--glass)!important;color:var(--ink)!important;border-right:1px solid var(--glass-border);backdrop-filter:blur(32px);}
+html[data-theme="light"] .admin-brand {color:var(--ink);}
+html[data-theme="light"] .admin-nav-item.is-active,html[data-theme="dark"] .admin-nav-item.is-active {background:var(--ink);color:var(--glass);}
+
 @media (max-width: 639px) {
   .site-footer { padding-top: 1rem; padding-bottom: calc(1rem + env(safe-area-inset-bottom)); }
 }

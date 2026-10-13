@@ -1,3 +1,4 @@
+import { ThemeControl } from "@/components/theme-control";
 import { BrandProvider } from "@/components/site-brand";
 import type { Metadata } from "next";
 import "./globals.css";
@@ -23,9 +24,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN">
+    <html lang="zh-CN" suppressHydrationWarning>
       <body className="antialiased">
-        <BrandProvider>{children}</BrandProvider>
+        <script dangerouslySetInnerHTML={{__html:"try{document.documentElement.dataset.theme=localStorage.getItem('cabinlink-theme')||'original'}catch(e){}"}}/><ThemeControl/><BrandProvider>{children}</BrandProvider>
         <footer className="site-footer" aria-label="免责声明">
           <span className="site-footer-label">免责声明</span>
           <span>本项目由华北水利水电大学陈会闯开发，仅供学习和参考。</span>

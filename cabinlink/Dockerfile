@@ -11,6 +11,7 @@ ENV NODE_ENV=production
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 COPY docker/start.sh ./start.sh
+COPY scripts/start-production.mjs scripts/word-scheduler.mjs ./scripts/
 RUN chmod 755 ./start.sh
 EXPOSE 80
 CMD ["/app/start.sh"]

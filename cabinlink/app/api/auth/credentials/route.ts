@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     const user = await sessionUser(request); if (!user) return jsonError("请先登录。", 401);
     const payload = await request.json() as { username?: unknown; password?: unknown };
     if (!validUsername(payload.username)) return jsonError("账号需为 3–32 位中文、字母、数字、下划线或短横线。");
-    if (!validPassword(payload.password)) return jsonError("密码长度需为 6–128 位。");
+    if (!validPassword(payload.password)) return jsonError("密码须为 8–128 位，同时包含英文字母和数字。");
     const { db } = requireStorage(); const salt = newToken();
     try {
       const result = await db.prepare("UPDATE users SET username = ?, password_salt = ?, password_hash = ? WHERE id = ? AND username IS NULL AND password_hash IS NULL").bind(payload.username, salt, await passwordHash(payload.password as string, salt), user.id).run();
