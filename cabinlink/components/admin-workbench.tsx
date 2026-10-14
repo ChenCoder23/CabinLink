@@ -16,8 +16,8 @@ type Task = {
     seen: number;
 };
 const blank: Task = { id: '', kind: 'main', title: '', description: '', due_date: '', criteria: '', progress: 0, sort_order: 0, focus: 0, poster: '', celebration: 0, seen: 0 };
-export default function Workbench() {
-    const [view,setView]=useState('overview'),[query,setQuery]=useState(''),[bannerEditing,setBannerEditing]=useState(false);
+export default function Workbench({initialView='overview'}:{initialView?:string}) {
+    const [view,setView]=useState(initialView),[query,setQuery]=useState(''),[bannerEditing,setBannerEditing]=useState(false);
     const [banner,setBanner]=useState({hero_title:'',hero_description:'',hero_background:''});
     const [tasks, setTasks] = useState<Task[]>([]), [introduction, setIntroduction] = useState(''), [editing, setEditing] = useState<Task | null>(null), [poster, setPoster] = useState<Task | null>(null), [error, setError] = useState(''), [loaded, setLoaded] = useState(false);
     async function load() { const r = await fetch('/api/workbench', { cache: 'no-store' }); const b = await r.json() as {

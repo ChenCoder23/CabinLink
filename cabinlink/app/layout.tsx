@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./dashboard.css";
 import "./reference-ui.css";
+import "./study-workbench.css";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {

@@ -47,7 +47,7 @@ export async function POST(r: Request) {
     else if (b.action === 'profile') {
         if (typeof b.introduction !== 'string' || b.introduction.length > 20000)
             return jsonError('介绍最多20000字');
-        await db.prepare('UPDATE workbench_profile SET introduction=? WHERE user_id=?').bind(b.introduction, user.id).run();
+        await db.batch([db.prepare('INSERT INTO workbench_profile_history SELECT ?,user_id,introduction,? FROM workbench_profile WHERE user_id=? AND introduction!=?').bind(crypto.randomUUID(),new Date().toISOString(),user.id,b.introduction),db.prepare('UPDATE workbench_profile SET introduction=? WHERE user_id=?').bind(b.introduction, user.id)]);
     }
     else if (b.action === 'seen') {
         await db.prepare('UPDATE workbench_tasks SET seen=celebration WHERE id=? AND user_id=?').bind(b.id, user.id).run();
