@@ -3,6 +3,7 @@ import { BrandProvider } from "@/components/site-brand";
 import type { Metadata } from "next";
 import "./globals.css";
 import "./dashboard.css";
+import "./reference-ui.css";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
