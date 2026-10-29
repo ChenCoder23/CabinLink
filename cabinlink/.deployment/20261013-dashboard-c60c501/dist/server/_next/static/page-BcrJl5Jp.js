@@ -1,0 +1,1 @@
+import{r as e}from"./navigation-errors-_SKRnUhA.js";import"./navigation.react-server-B9ePznBN.js";function t(){e(`/admin/workbench`)}export{t as default};

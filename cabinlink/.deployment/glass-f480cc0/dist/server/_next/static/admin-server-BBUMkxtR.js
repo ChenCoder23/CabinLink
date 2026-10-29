@@ -1,0 +1,1 @@
+import{b as e,d as t}from"./auth-server-vWmJJnuc.js";async function n(n){let r=await t(n);return r?r.role===`admin`?{user:r}:{response:e(`仅系统管理员可访问。`,403)}:{response:e(`请先登录。`,401)}}var r={"Cache-Control":`private, no-store`};export{n,r as t};

@@ -1,0 +1,1 @@
+import"./navigation-qW5dWf2-.js";function e(e,t){return null}function t(e,t){return null}export{e as resolveHybridClientRewriteHref,t as resolveHybridClientRouteOwner};

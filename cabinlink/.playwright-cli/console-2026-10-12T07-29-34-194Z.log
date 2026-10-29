@@ -1,0 +1,6 @@
+[   40401ms] [ERROR] [vinext] RSC prefetch setup error: TypeError: ne is not a function
+    at http://127.0.0.1:8788/_next/static/chunks/link-Doy7Zoz7.js:2:4303 @ http://127.0.0.1:8788/_next/static/chunks/link-Doy7Zoz7.js:1
+[   40401ms] [ERROR] [vinext] RSC prefetch setup error: TypeError: ne is not a function
+    at http://127.0.0.1:8788/_next/static/chunks/link-Doy7Zoz7.js:2:4303 @ http://127.0.0.1:8788/_next/static/chunks/link-Doy7Zoz7.js:1
+[   40401ms] [ERROR] [vinext] RSC prefetch setup error: TypeError: ne is not a function
+    at http://127.0.0.1:8788/_next/static/chunks/link-Doy7Zoz7.js:2:4303 @ http://127.0.0.1:8788/_next/static/chunks/link-Doy7Zoz7.js:1

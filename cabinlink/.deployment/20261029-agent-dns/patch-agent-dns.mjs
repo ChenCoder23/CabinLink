@@ -1,0 +1,22 @@
+import { createRequire } from 'node:module';
+import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { createHash } from 'node:crypto';
+const require = createRequire('/app/package.json');
+const ts = require('typescript');
+const root = '/app/dist/server/_next/static';
+const candidates = readdirSync(root).filter(name => name.endsWith('.js') && readFileSync(join(root, name), 'utf8').includes('https://cloudflare-dns.com/dns-query?name='));
+if (candidates.length !== 1) throw Error('Expected exactly one deployed agent module');
+const path = join(root, candidates[0]);
+const before = readFileSync(path, 'utf8');
+const source = ts.createSourceFile(path, before, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+const functions = source.statements.filter(node => ts.isFunctionDeclaration(node) && node.getText(source).includes('https://cloudflare-dns.com/dns-query?name='));
+if (functions.length !== 1 || !functions[0].name) throw Error('Expected exactly one old DNS checker');
+const fn = functions[0];
+const after = `import { checkDNS as ${fn.name.text} } from "./agent-network-dns-fallback.js";\n`
+  + before.slice(0, fn.getStart(source)) + before.slice(fn.end);
+if (after.includes('https://cloudflare-dns.com/dns-query?name=')) throw Error('Old checker remains');
+const parsed = ts.createSourceFile(path, after, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+if (parsed.parseDiagnostics.length) throw Error('Patched module has syntax errors');
+writeFileSync(path, after);
+console.log(JSON.stringify({ module: candidates[0], before: createHash('sha256').update(before).digest('hex'), after: createHash('sha256').update(after).digest('hex'), change: 'DNS checker only; all other deployed application code retained' }));

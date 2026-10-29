@@ -1,0 +1,611 @@
+{
+  "_admin-server-BBUMkxtR.js": {
+    "file": "_next/static/admin-server-BBUMkxtR.js",
+    "name": "admin-server",
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "_app-page-cache-finalizer-46CxvcXZ.js": {
+    "file": "_next/static/app-page-cache-finalizer-46CxvcXZ.js",
+    "name": "app-page-cache-finalizer",
+    "imports": [
+      "_isr-cache-x8ckJcPf.js",
+      "_cache-headers-C6Ei_pjf.js",
+      "_text-stream-BZBvt_hB.js",
+      "_record-Crmk5sem.js"
+    ]
+  },
+  "_app-page-stream-vIapV47e.js": {
+    "file": "_next/static/app-page-stream-vIapV47e.js",
+    "name": "app-page-stream",
+    "imports": [
+      "_rolldown-runtime-DIIVkLiU.js",
+      "_framework~index~page~page~layout~page~page~page~page~page~page~app-page-cache-render~app-pa~fko7bm0t-fQRAjK9T.js",
+      "_cache-headers-C6Ei_pjf.js",
+      "_text-stream-BZBvt_hB.js",
+      "_record-Crmk5sem.js",
+      "_implicit-tags-BD2sGMfJ.js"
+    ]
+  },
+  "_app-prerender-static-params-CX4-8BGm.js": {
+    "file": "_next/static/app-prerender-static-params-CX4-8BGm.js",
+    "name": "app-prerender-static-params",
+    "imports": [
+      "_record-Crmk5sem.js",
+      "_root-params-0DVgYa50.js"
+    ]
+  },
+  "_app-segment-config-DB54pSvA.js": {
+    "file": "_next/static/app-segment-config-DB54pSvA.js",
+    "name": "app-segment-config",
+    "imports": [
+      "_rolldown-runtime-DIIVkLiU.js",
+      "_framework~index~page~page~layout~page~page~page~page~page~page~app-page-cache-render~app-pa~fko7bm0t-fQRAjK9T.js",
+      "_isr-cache-x8ckJcPf.js",
+      "_cache-headers-C6Ei_pjf.js",
+      "_record-Crmk5sem.js",
+      "_root-params-0DVgYa50.js",
+      "_implicit-tags-BD2sGMfJ.js"
+    ]
+  },
+  "_auth-server-vWmJJnuc.js": {
+    "file": "_next/static/auth-server-vWmJJnuc.js",
+    "name": "auth-server"
+  },
+  "_cabinet-workspace-B1-Sz_JG.js": {
+    "file": "_next/static/cabinet-workspace-B1-Sz_JG.js",
+    "name": "cabinet-workspace",
+    "imports": [
+      "_rsc-3URjkoNS.js"
+    ]
+  },
+  "_cache-headers-C6Ei_pjf.js": {
+    "file": "_next/static/cache-headers-C6Ei_pjf.js",
+    "name": "cache-headers",
+    "imports": [
+      "_rolldown-runtime-DIIVkLiU.js",
+      "_framework~index~page~layout~page~page~app-page-cache-render~app-page-cache~app-route-handle~mgm2ah13-C7tDtSmy.js",
+      "_framework~index~page~page~layout~page~page~page~page~page~page~app-page-cache-render~app-pa~fko7bm0t-fQRAjK9T.js",
+      "_record-Crmk5sem.js"
+    ]
+  },
+  "_framework~index-D7No3cxu.js": {
+    "file": "_next/static/framework~index-D7No3cxu.js",
+    "name": "framework~index",
+    "imports": [
+      "_rolldown-runtime-DIIVkLiU.js",
+      "_framework~index~page~page~layout~page~page~page~page~page~page~app-route-handler-dispatch-DIFriXEP.js"
+    ]
+  },
+  "_framework~index~page~layout~page~page~app-page-cache-render~app-page-cache~app-route-handle~mgm2ah13-C7tDtSmy.js": {
+    "file": "_next/static/framework~index~page~layout~page~page~app-page-cache-render~app-page-cache~app-route-handle~mgm2ah13-C7tDtSmy.js",
+    "name": "framework~index~page~layout~page~page~app-page-cache-render~app-page-cache~app-route-handle~mgm2ah13",
+    "imports": [
+      "_rolldown-runtime-DIIVkLiU.js",
+      "_framework~index~page~page~layout~page~page~page~page~page~page~app-page-cache-render~app-pa~fko7bm0t-fQRAjK9T.js"
+    ]
+  },
+  "_framework~index~page~page~layout~page~page~page~page~page~page~app-page-cache-render~app-pa~fko7bm0t-fQRAjK9T.js": {
+    "file": "_next/static/framework~index~page~page~layout~page~page~page~page~page~page~app-page-cache-render~app-pa~fko7bm0t-fQRAjK9T.js",
+    "name": "framework~index~page~page~layout~page~page~page~page~page~page~app-page-cache-render~app-pa~fko7bm0t",
+    "imports": [
+      "_rolldown-runtime-DIIVkLiU.js"
+    ]
+  },
+  "_framework~index~page~page~layout~page~page~page~page~page~page~app-route-handler-dispatch-DIFriXEP.js": {
+    "file": "_next/static/framework~index~page~page~layout~page~page~page~page~page~page~app-route-handler-dispatch-DIFriXEP.js",
+    "name": "framework~index~page~page~layout~page~page~page~page~page~page~app-route-handler-dispatch",
+    "imports": [
+      "_rolldown-runtime-DIIVkLiU.js",
+      "_framework~index~page~page~layout~page~page~page~page~page~page~app-page-cache-render~app-pa~fko7bm0t-fQRAjK9T.js"
+    ]
+  },
+  "_implicit-tags-BD2sGMfJ.js": {
+    "file": "_next/static/implicit-tags-BD2sGMfJ.js",
+    "name": "implicit-tags",
+    "imports": [
+      "_cache-headers-C6Ei_pjf.js"
+    ]
+  },
+  "_isr-cache-x8ckJcPf.js": {
+    "file": "_next/static/isr-cache-x8ckJcPf.js",
+    "name": "isr-cache",
+    "imports": [
+      "_cache-headers-C6Ei_pjf.js"
+    ]
+  },
+  "_navigation-runtime-Bi3Vx8Ii.js": {
+    "file": "_next/static/navigation-runtime-Bi3Vx8Ii.js",
+    "name": "navigation-runtime",
+    "imports": [
+      "_cache-headers-C6Ei_pjf.js"
+    ]
+  },
+  "_record-Crmk5sem.js": {
+    "file": "_next/static/record-Crmk5sem.js",
+    "name": "record"
+  },
+  "_rolldown-runtime-DIIVkLiU.js": {
+    "file": "_next/static/rolldown-runtime-DIIVkLiU.js",
+    "name": "rolldown-runtime"
+  },
+  "_root-params-0DVgYa50.js": {
+    "file": "_next/static/root-params-0DVgYa50.js",
+    "name": "root-params",
+    "imports": [
+      "_record-Crmk5sem.js"
+    ]
+  },
+  "_rsc-3URjkoNS.js": {
+    "file": "_next/static/rsc-3URjkoNS.js",
+    "name": "rsc",
+    "imports": [
+      "_rolldown-runtime-DIIVkLiU.js",
+      "_framework~index~page~page~layout~page~page~page~page~page~page~app-route-handler-dispatch-DIFriXEP.js"
+    ]
+  },
+  "_site-settings-CyC9iZu_.js": {
+    "file": "_next/static/site-settings-CyC9iZu_.js",
+    "name": "site-settings",
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "_text-stream-BZBvt_hB.js": {
+    "file": "_next/static/text-stream-BZBvt_hB.js",
+    "name": "text-stream",
+    "imports": [
+      "_cache-headers-C6Ei_pjf.js",
+      "_record-Crmk5sem.js"
+    ]
+  },
+  "app/admin/page.tsx": {
+    "file": "_next/static/page-C5B1sXyd.js",
+    "name": "page",
+    "src": "app/admin/page.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rsc-3URjkoNS.js"
+    ]
+  },
+  "app/api/admin/route.ts": {
+    "file": "_next/static/route-Dm3BXoXZ.js",
+    "name": "route",
+    "src": "app/api/admin/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_admin-server-BBUMkxtR.js",
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/admin/users/[id]/route.ts": {
+    "file": "_next/static/route-CxiRlUAi.js",
+    "name": "route",
+    "src": "app/api/admin/users/[id]/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_admin-server-BBUMkxtR.js",
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/admin/wordbook/route.ts": {
+    "file": "_next/static/route-CJChi_Cl.js",
+    "name": "route",
+    "src": "app/api/admin/wordbook/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-DIIVkLiU.js",
+      "_admin-server-BBUMkxtR.js",
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/auth/cabinets/route.ts": {
+    "file": "_next/static/route-CYSLKQLZ.js",
+    "name": "route",
+    "src": "app/api/auth/cabinets/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/auth/credentials/route.ts": {
+    "file": "_next/static/route-DvfMIy-8.js",
+    "name": "route",
+    "src": "app/api/auth/credentials/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/auth/email/send-code/route.ts": {
+    "file": "_next/static/route-BP-1q8FP.js",
+    "name": "route",
+    "src": "app/api/auth/email/send-code/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/auth/email/verify-code/route.ts": {
+    "file": "_next/static/route-BXZd9lQB.js",
+    "name": "route",
+    "src": "app/api/auth/email/verify-code/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/auth/login/route.ts": {
+    "file": "_next/static/route-Dsf6rfjK.js",
+    "name": "route",
+    "src": "app/api/auth/login/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/auth/register/route.ts": {
+    "file": "_next/static/route-D7U89Fc7.js",
+    "name": "route",
+    "src": "app/api/auth/register/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/auth/session/route.ts": {
+    "file": "_next/static/route-H1I41o4t.js",
+    "name": "route",
+    "src": "app/api/auth/session/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/cabinets/[token]/close/route.ts": {
+    "file": "_next/static/route-BgOJEO3Z.js",
+    "name": "route",
+    "src": "app/api/cabinets/[token]/close/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/cabinets/[token]/join/route.ts": {
+    "file": "_next/static/route-Bke_8N5d.js",
+    "name": "route",
+    "src": "app/api/cabinets/[token]/join/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/cabinets/[token]/route.ts": {
+    "file": "_next/static/route-DNiUgKdg.js",
+    "name": "route",
+    "src": "app/api/cabinets/[token]/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/cabinets/owned/[id]/close/route.ts": {
+    "file": "_next/static/route-DDHqthBo.js",
+    "name": "route",
+    "src": "app/api/cabinets/owned/[id]/close/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/cabinets/owned/[id]/links/route.ts": {
+    "file": "_next/static/route-CStX-UM9.js",
+    "name": "route",
+    "src": "app/api/cabinets/owned/[id]/links/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js",
+      "_site-settings-CyC9iZu_.js"
+    ]
+  },
+  "app/api/cabinets/owned/[id]/route.ts": {
+    "file": "_next/static/route-7rahTOyx.js",
+    "name": "route",
+    "src": "app/api/cabinets/owned/[id]/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/cabinets/route.ts": {
+    "file": "_next/static/route-BPLcMl1_.js",
+    "name": "route",
+    "src": "app/api/cabinets/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/files/[id]/route.ts": {
+    "file": "_next/static/route-DowRhLv7.js",
+    "name": "route",
+    "src": "app/api/files/[id]/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/site-settings/route.ts": {
+    "file": "_next/static/route-AiSOWkYV.js",
+    "name": "route",
+    "src": "app/api/site-settings/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js",
+      "_site-settings-CyC9iZu_.js"
+    ]
+  },
+  "app/api/themes/[id]/route.ts": {
+    "file": "_next/static/route-C-h_RCyb.js",
+    "name": "route",
+    "src": "app/api/themes/[id]/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/themes/route.ts": {
+    "file": "_next/static/route-D8w3B5FM.js",
+    "name": "route",
+    "src": "app/api/themes/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/uploads/[id]/complete/route.ts": {
+    "file": "_next/static/route-BLvtPleJ.js",
+    "name": "route",
+    "src": "app/api/uploads/[id]/complete/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/uploads/[id]/parts/[partNumber]/route.ts": {
+    "file": "_next/static/route-CBD2plVZ.js",
+    "name": "route",
+    "src": "app/api/uploads/[id]/parts/[partNumber]/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/uploads/[id]/route.ts": {
+    "file": "_next/static/route-BsVuaV4k.js",
+    "name": "route",
+    "src": "app/api/uploads/[id]/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/uploads/route.ts": {
+    "file": "_next/static/route-CscCXiV3.js",
+    "name": "route",
+    "src": "app/api/uploads/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/api/wordbook/route.ts": {
+    "file": "_next/static/route-BHhqZukx2.js",
+    "name": "route",
+    "src": "app/api/wordbook/route.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_admin-server-BBUMkxtR.js",
+      "_auth-server-vWmJJnuc.js"
+    ]
+  },
+  "app/c/[token]/page.tsx": {
+    "file": "_next/static/page-DwPYwui7.js",
+    "name": "page",
+    "src": "app/c/[token]/page.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_cabinet-workspace-B1-Sz_JG.js",
+      "_framework~index~page~layout~page~page~app-page-cache-render~app-page-cache~app-route-handle~mgm2ah13-C7tDtSmy.js"
+    ]
+  },
+  "app/manage/[token]/page.tsx": {
+    "file": "_next/static/page-BNDqqcBr.js",
+    "name": "page",
+    "src": "app/manage/[token]/page.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_cabinet-workspace-B1-Sz_JG.js",
+      "_framework~index~page~layout~page~page~app-page-cache-render~app-page-cache~app-route-handle~mgm2ah13-C7tDtSmy.js"
+    ]
+  },
+  "app/my/cabinets/[id]/page.tsx": {
+    "file": "_next/static/page-96DpSR89.js",
+    "name": "page",
+    "src": "app/my/cabinets/[id]/page.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_cabinet-workspace-B1-Sz_JG.js",
+      "_framework~index~page~layout~page~page~app-page-cache-render~app-page-cache~app-route-handle~mgm2ah13-C7tDtSmy.js"
+    ]
+  },
+  "app/my/page.tsx": {
+    "file": "_next/static/page-Dg5XpANW.js",
+    "name": "page",
+    "src": "app/my/page.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rsc-3URjkoNS.js"
+    ]
+  },
+  "app/page.tsx": {
+    "file": "_next/static/page-DmY113c7.js",
+    "name": "page",
+    "src": "app/page.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rsc-3URjkoNS.js"
+    ]
+  },
+  "app/settings/page.tsx": {
+    "file": "_next/static/page-CQPiT792.js",
+    "name": "page",
+    "src": "app/settings/page.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rsc-3URjkoNS.js"
+    ]
+  },
+  "app/wordbook/page.tsx": {
+    "file": "_next/static/page-DINKGQWX.js",
+    "name": "page",
+    "src": "app/wordbook/page.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rsc-3URjkoNS.js"
+    ]
+  },
+  "node_modules/vinext/dist/server/app-page-cache-render.js": {
+    "file": "_next/static/app-page-cache-render-CLJTQtH7.js",
+    "name": "app-page-cache-render",
+    "src": "node_modules/vinext/dist/server/app-page-cache-render.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_cache-headers-C6Ei_pjf.js",
+      "_app-page-stream-vIapV47e.js",
+      "_text-stream-BZBvt_hB.js",
+      "_implicit-tags-BD2sGMfJ.js"
+    ]
+  },
+  "node_modules/vinext/dist/server/app-page-cache.js": {
+    "file": "_next/static/app-page-cache-Q0Kz1-BL.js",
+    "name": "app-page-cache",
+    "src": "node_modules/vinext/dist/server/app-page-cache.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_navigation-runtime-Bi3Vx8Ii.js",
+      "_isr-cache-x8ckJcPf.js",
+      "_cache-headers-C6Ei_pjf.js",
+      "_app-page-cache-finalizer-46CxvcXZ.js",
+      "_text-stream-BZBvt_hB.js",
+      "_record-Crmk5sem.js"
+    ]
+  },
+  "node_modules/vinext/dist/server/app-prerender-endpoints.js": {
+    "file": "_next/static/app-prerender-endpoints-Bks6MJFU.js",
+    "name": "app-prerender-endpoints",
+    "src": "node_modules/vinext/dist/server/app-prerender-endpoints.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_app-prerender-static-params-CX4-8BGm.js",
+      "_root-params-0DVgYa50.js"
+    ]
+  },
+  "node_modules/vinext/dist/server/app-route-handler-dispatch.js": {
+    "file": "_next/static/app-route-handler-dispatch-DBttq2MX.js",
+    "name": "app-route-handler-dispatch",
+    "src": "node_modules/vinext/dist/server/app-route-handler-dispatch.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-DIIVkLiU.js",
+      "_rsc-3URjkoNS.js",
+      "_framework~index~page~page~layout~page~page~page~page~page~page~app-page-cache-render~app-pa~fko7bm0t-fQRAjK9T.js",
+      "_navigation-runtime-Bi3Vx8Ii.js",
+      "_isr-cache-x8ckJcPf.js",
+      "_app-segment-config-DB54pSvA.js",
+      "_cache-headers-C6Ei_pjf.js",
+      "node_modules/vinext/dist/server/app-static-generation.js",
+      "_record-Crmk5sem.js",
+      "_root-params-0DVgYa50.js",
+      "_implicit-tags-BD2sGMfJ.js"
+    ],
+    "dynamicImports": [
+      "_cache-headers-C6Ei_pjf.js"
+    ]
+  },
+  "node_modules/vinext/dist/server/app-static-generation.js": {
+    "file": "_next/static/app-static-generation-axvP-Bi4.js",
+    "name": "app-static-generation",
+    "src": "node_modules/vinext/dist/server/app-static-generation.js",
+    "isDynamicEntry": true
+  },
+  "virtual:cloudflare/worker-entry": {
+    "file": "index.js",
+    "name": "index",
+    "src": "virtual:cloudflare/worker-entry",
+    "isEntry": true,
+    "imports": [
+      "_rolldown-runtime-DIIVkLiU.js",
+      "_rsc-3URjkoNS.js",
+      "_framework~index-D7No3cxu.js",
+      "_framework~index~page~layout~page~page~app-page-cache-render~app-page-cache~app-route-handle~mgm2ah13-C7tDtSmy.js",
+      "_framework~index~page~page~layout~page~page~page~page~page~page~app-page-cache-render~app-pa~fko7bm0t-fQRAjK9T.js",
+      "_isr-cache-x8ckJcPf.js",
+      "_app-segment-config-DB54pSvA.js",
+      "_cache-headers-C6Ei_pjf.js",
+      "_app-page-cache-finalizer-46CxvcXZ.js",
+      "_app-page-stream-vIapV47e.js",
+      "_text-stream-BZBvt_hB.js",
+      "_app-prerender-static-params-CX4-8BGm.js",
+      "_record-Crmk5sem.js",
+      "_root-params-0DVgYa50.js",
+      "_implicit-tags-BD2sGMfJ.js"
+    ],
+    "dynamicImports": [
+      "node_modules/vinext/dist/server/app-prerender-endpoints.js",
+      "node_modules/vinext/dist/server/app-static-generation.js",
+      "node_modules/vinext/dist/server/app-page-cache.js",
+      "node_modules/vinext/dist/server/app-page-cache-render.js",
+      "node_modules/vinext/dist/server/app-route-handler-dispatch.js",
+      "app/api/cabinets/owned/[id]/close/route.ts",
+      "virtual:cloudflare/worker-entry",
+      "app/api/cabinets/owned/[id]/links/route.ts",
+      "app/api/cabinets/[token]/close/route.ts",
+      "app/api/cabinets/[token]/join/route.ts",
+      "app/api/uploads/[id]/complete/route.ts",
+      "app/api/uploads/[id]/parts/[partNumber]/route.ts",
+      "app/api/admin/users/[id]/route.ts",
+      "app/api/cabinets/owned/[id]/route.ts",
+      "app/page.tsx",
+      "app/admin/page.tsx",
+      "app/api/admin/route.ts",
+      "app/api/admin/wordbook/route.ts",
+      "app/api/auth/cabinets/route.ts",
+      "app/api/auth/credentials/route.ts",
+      "app/api/auth/email/send-code/route.ts",
+      "app/api/auth/email/verify-code/route.ts",
+      "app/api/auth/login/route.ts",
+      "app/api/auth/register/route.ts",
+      "app/api/auth/session/route.ts",
+      "app/api/cabinets/route.ts",
+      "app/api/site-settings/route.ts",
+      "app/api/themes/route.ts",
+      "app/api/uploads/route.ts",
+      "app/api/wordbook/route.ts",
+      "app/my/page.tsx",
+      "app/settings/page.tsx",
+      "app/wordbook/page.tsx",
+      "app/api/cabinets/[token]/route.ts",
+      "app/api/files/[id]/route.ts",
+      "app/api/themes/[id]/route.ts",
+      "app/api/uploads/[id]/route.ts",
+      "app/my/cabinets/[id]/page.tsx",
+      "app/c/[token]/page.tsx",
+      "app/manage/[token]/page.tsx"
+    ],
+    "css": [
+      "_next/static/css/index.BzdslZzK.css"
+    ]
+  }
+}

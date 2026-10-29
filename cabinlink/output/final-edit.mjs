@@ -1,0 +1,7 @@
+import fs from 'node:fs';
+const edit=(p,f)=>fs.writeFileSync(p,f(fs.readFileSync(p,'utf8')));
+for(const p of ['app/workbench/page.tsx','components/word-schedule-admin.tsx'])edit(p,s=>s.replace('useEffect(()=>{void load();},[]);','useEffect(()=>{const timer=setTimeout(()=>void load(),0);return()=>clearTimeout(timer);},[]);'));
+edit('app/workbench/page.tsx',s=>s.replace('@next/next/no-img-element, ',''));
+edit('components/personal-settings.tsx',s=>s.replace('window.location.assign(\'/\?returnTo=/settings\')','window.location.replace(\'/\?returnTo=/settings\')').replace('[zoom,setZoom]=useState(1)','[zoom,setZoom]=useState(1),[ratio,setRatio]=useState(1)').replace('setSource(String(reader.result));setZoom(1);','const image=new Image();image.onload=()=>{setRatio(image.width/Math.min(image.width,image.height));setSource(String(reader.result));};image.src=String(reader.result);setZoom(1);').replace('${zoom*100}%','${zoom*ratio*100}%'));
+edit('app/api/uploads/[id]/parts/[partNumber]/route.ts',s=>s.replace('WHERE id = ? AND expires_at > ?','WHERE id = ? AND completing=0 AND expires_at > ?'));
+edit('app/api/uploads/[id]/route.ts',s=>s.replace('upload_id, uploader_user_id FROM','upload_id, uploader_user_id, completing FROM').replace('upload_id: string','completing:number; upload_id: string').replace('if (upload) {','if (upload) { if(upload.completing)return jsonError("上传正在完成，请稍后重试",409);'));

@@ -1,0 +1,69 @@
+- generic [ref=f4e1]:
+  - main [ref=f4e2]:
+    - complementary [ref=f4e3]:
+      - link "柜联 ADMIN CONSOLE" [ref=f4e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f4e9]:
+          - text: 柜联
+          - generic [ref=f4e10]: ADMIN CONSOLE
+      - navigation "管理后台功能" [ref=f4e11]:
+        - link "数据概览" [ref=f4e12] [cursor=pointer]:
+          - /url: "#overview"
+        - link "单词本管理" [ref=f4e19] [cursor=pointer]:
+          - /url: "#wordbook"
+        - link "用户管理" [ref=f4e24] [cursor=pointer]:
+          - /url: "#users"
+        - link "智能柜管理" [ref=f4e31] [cursor=pointer]:
+          - /url: "#cabinets"
+        - link "操作日志" [ref=f4e36] [cursor=pointer]:
+          - /url: "#logs"
+        - link "网站设置" [ref=f4e41] [cursor=pointer]:
+          - /url: "#settings"
+    - generic [ref=f4e46]:
+      - generic [ref=f4e47]:
+        - generic [ref=f4e48]:
+          - text: 管理后台
+          - strong [ref=f4e51]: 单词本管理
+        - link "返回网站" [ref=f4e52] [cursor=pointer]:
+          - /url: /
+      - generic [ref=f4e56]:
+        - generic [ref=f4e57]:
+          - generic [ref=f4e58]:
+            - paragraph [ref=f4e59]: CABINLINK / WORDBOOK
+            - heading "单词本管理" [level=1] [ref=f4e60]
+            - paragraph [ref=f4e61]: 创建分类、导入 Excel 并发布每日单词
+          - button "刷新数据" [ref=f4e72] [cursor=pointer]
+        - generic [ref=f4e73]:
+          - generic [ref=f4e74]:
+            - heading "单词分类" [level=2] [ref=f4e75]
+            - generic [ref=f4e76]:
+              - textbox "分类名称" [ref=f4e77]:
+                - /placeholder: 例如：四级核心词
+              - button "创建分类" [ref=f4e78] [cursor=pointer]
+            - paragraph [ref=f4e79]: 四级核心词
+          - generic [ref=f4e80]:
+            - heading "发布每日单词" [level=2] [ref=f4e81]
+            - paragraph [ref=f4e82]: 下载模板填写“英文”和“中文意思”，每次最多 500 个单词、2 MB。上传会追加一个批次；未来日期的内容将在当天开放。
+            - link "下载 Excel 模板" [active] [ref=f4e83] [cursor=pointer]:
+              - /url: /api/admin/wordbook?template=1
+            - generic [ref=f4e84]:
+              - generic [ref=f4e85]:
+                - text: 分类
+                - combobox "分类" [ref=f4e86]:
+                  - option "请选择分类"
+                  - option "四级核心词" [selected]
+              - generic [ref=f4e87]:
+                - text: 每日单词日期
+                - textbox "每日单词日期" [ref=f4e88]: 2026-10-12
+              - generic [ref=f4e89]:
+                - text: Excel 文件
+                - button "Excel 文件" [ref=f4e90]
+              - button "上传并发布" [disabled] [ref=f4e91]
+          - generic [ref=f4e92]:
+            - heading "最近上传记录" [level=2] [ref=f4e93]
+            - generic [ref=f4e94]:
+              - generic [ref=f4e95]: 四级核心词 · 2026-10-12 · 2 个单词
+              - generic [ref=f4e96]: 上传于 2026/10/12 15:32:54
+  - contentinfo "免责声明" [ref=f4e69]:
+    - generic [ref=f4e71]: 本项目由华北水利水电大学陈会闯开发，仅供学习和参考。
+  - region "Notifications alt+T"

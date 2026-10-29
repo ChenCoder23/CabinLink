@@ -7,3 +7,5 @@
 .study-brand strong{white-space:nowrap;font-size:20px}.study-brand{padding-left:6px!important;padding-right:0!important;gap:7px!important}.study-hero .study-banner-title{padding:0;background:none;font-size:inherit}
 
 html[data-theme=dark] .study-sidebar nav button{background:transparent}html[data-theme=dark] .study-sidebar nav button.active{background:#324e3f}html[data-theme=dark] .study-card p,html[data-theme=dark] .study-summary span,html[data-theme=dark] .study-task-text small,html[data-theme=dark] .study-card h3 small,html[data-theme=dark] .study-coach>p,html[data-theme=dark] .study-message small,html[data-theme=dark] .study-node small{color:#b9c9be}html[data-theme=dark] .study-summary small{color:#b5dec7}
+
+.study-countdown{display:flex;align-items:center;justify-content:space-between;gap:16px;background:linear-gradient(110deg,var(--card,#fff),#57b38a18)}.study-countdown strong{display:block;font-size:24px;margin-top:4px}.study-countdown b{color:#268564;font-size:34px}.study-countdown p{margin:4px 0 0}.study-countdown>button{flex-shrink:0}@media(max-width:600px){.study-countdown{align-items:flex-start;flex-direction:column}}

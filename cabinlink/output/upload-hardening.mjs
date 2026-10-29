@@ -1,0 +1,4 @@
+import fs from 'node:fs';
+const edit=(p,f)=>fs.writeFileSync(p,f(fs.readFileSync(p,'utf8')));
+edit('app/api/uploads/route.ts',s=>s.replace('const now = new Date(); await db.prepare("DELETE FROM uploads WHERE expires_at <= ?").bind(now.toISOString()).run();',`const now = new Date(); const expired=await db.prepare("SELECT id,object_key,upload_id FROM uploads WHERE expires_at<=?").bind(now.toISOString()).all<{id:string;object_key:string;upload_id:string}>();for(const old of expired.results){try{await bucket.resumeMultipartUpload(old.object_key,old.upload_id).abort();}catch{} await db.prepare("DELETE FROM uploads WHERE id=?").bind(old.id).run();}`));
+edit('app/api/uploads/[id]/parts/[partNumber]/route.ts',s=>s.replace('parts_json: string','size_bytes:number; parts_json: string').replace('if (!length || length > CHUNK_SIZE)','if (!length || part>Math.ceil(upload.size_bytes/CHUNK_SIZE) || length!==Math.min(CHUNK_SIZE,upload.size_bytes-(part-1)*CHUNK_SIZE))'));

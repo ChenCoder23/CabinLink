@@ -1,0 +1,42 @@
+import { build } from 'esbuild';
+import { Miniflare } from 'miniflare';
+import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+const root=process.cwd(), scratch=await mkdtemp(path.join(tmpdir(),'cabinlink-admin-'));
+let mf;
+try {
+ const out=path.join(scratch,'worker.mjs');
+ await build({stdin:{contents:`import {GET} from './app/api/admin/route'; import {PATCH} from './app/api/admin/users/[id]/route'; import {POST as login} from './app/api/auth/login/route'; import {GET as session} from './app/api/auth/session/route'; export default {fetch(r){const p=new URL(r.url).pathname;return p==='/api/admin'?GET(r):p==='/api/auth/login'?login(r):p==='/api/auth/session'?session(r):PATCH(r,{params:Promise.resolve({id:p.split('/').pop()})});}}`,resolveDir:root},bundle:true,format:'esm',platform:'neutral',external:['cloudflare:workers'],alias:{'@':root},outfile:out});
+ mf=new Miniflare({modules:true,scriptPath:out,compatibilityDate:'2026-05-01',compatibilityFlags:['nodejs_compat'],d1Databases:['DB'],r2Buckets:['BUCKET']});
+ const db=await mf.getD1Database('DB');
+ for(const file of (await readdir('drizzle')).filter(x=>x.endsWith('.sql')).sort()) {const sql=await readFile(path.join('drizzle',file),'utf8');for(const statement of sql.split(/;\s*(?:--> statement-breakpoint)?/).map(x=>x.trim()).filter(Boolean))await db.prepare(statement).run();}
+ const now=new Date().toISOString(), expires=new Date(Date.now()+86400000).toISOString();
+ for(const [id,role] of [['admin-test','admin'],['member-test','user']])await db.prepare('INSERT INTO users(id,username,role,created_at) VALUES(?,?,?,?)').bind(id,id,role,now).run();
+ const token='admin-smoke-token',memberToken='member-smoke-token';
+ const hash=async v=>{const {createHash}=await import('node:crypto');return createHash('sha256').update(v).digest('hex');};
+ for(const [id,t] of [['admin-test',token],['member-test',memberToken]])await db.prepare('INSERT INTO sessions(id,user_id,token_hash,expires_at,created_at) VALUES(?,?,?,?,?)').bind(id,id,await hash(t),expires,now).run();
+ const call=(p,tokenValue,method='GET',body,origin)=>mf.dispatchFetch('http://localhost'+p,{method,headers:{...(tokenValue?{cookie:'cabinlink_session='+tokenValue}:{}),...(body?{'content-type':'application/json'}:{}),...(origin?{origin}:{})},...(body?{body:JSON.stringify(body)}:{})});
+ assert.equal((await call('/api/admin')).status,401);assert.equal((await call('/api/admin',memberToken)).status,403);
+ let r=await call('/api/admin',token);assert.equal(r.status,200);let data=await r.json();assert.equal(data.stats.users,2);assert.equal(data.users.length,2);
+ assert.equal((await call('/api/admin?q=%25',token)).status,200);
+ const target='/api/admin/users/member-test';
+ assert.equal((await call(target,memberToken,'PATCH',{action:'ban',reason:'test'})).status,403);
+ assert.equal((await call(target,token,'PATCH',{action:'ban',reason:'test'},'https://foreign.example')).status,403);
+ assert.equal((await call('/api/admin/users/admin-test',token,'PATCH',{action:'ban',reason:'test'})).status,403);
+ assert.equal((await call(target,token,'PATCH',{action:'password',password:'123'})).status,400);
+ assert.equal((await call(target,token,'PATCH',{action:'password',password:'SmokePassword123'})).status,200);
+ assert.equal((await (await call('/api/auth/session',memberToken)).json()).user,null);
+ r=await call('/api/auth/login',null,'POST',{username:'member-test',password:'SmokePassword123'});assert.equal(r.status,200);const loggedToken=r.headers.get('set-cookie').match(/cabinlink_session=([^;]+)/)[1];
+ assert.equal((await call(target,token,'PATCH',{action:'ban',reason:'测试封禁'})).status,200);
+ assert.equal((await (await call('/api/auth/session',loggedToken)).json()).user,null);
+ assert.equal((await call('/api/auth/login',null,'POST',{username:'member-test',password:'SmokePassword123'})).status,403);
+ assert.equal((await call(target,token,'PATCH',{action:'unban'})).status,200);
+ r=await call('/api/auth/login',null,'POST',{username:'member-test',password:'SmokePassword123'});assert.equal(r.status,200);
+ const t=r.headers.get('set-cookie').match(/cabinlink_session=([^;]+)/)[1];
+ assert.equal((await call(target,token,'PATCH',{action:'logout'})).status,200);
+ assert.equal((await (await call('/api/auth/session',t)).json()).user,null);
+ data=await (await call('/api/admin',token)).json();assert.equal(data.logs.length,4);assert.ok(!JSON.stringify(data).includes('SmokePassword123'));assert.ok(!JSON.stringify(data).includes('password_hash'));
+ console.log('PASS: migrations, anonymous/member denial, admin overview/search, origin protection, administrator protection, password reset/login, ban/session revocation, unban, forced logout, audit and credential non-disclosure.');
+}finally{if(mf)await mf.dispose();await rm(scratch,{recursive:true,force:true});}

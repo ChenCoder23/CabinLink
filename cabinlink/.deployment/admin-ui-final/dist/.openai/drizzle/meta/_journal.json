@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1790136573332,
+      "tag": "0000_robust_saracen",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1790143096382,
+      "tag": "0001_third_cobalt_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1790564471692,
+      "tag": "0002_bouncy_shen",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1790667125591,
+      "tag": "0003_fantastic_human_robot",
+      "breakpoints": true
+    }
+  ]
+}

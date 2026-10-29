@@ -1,0 +1,22 @@
+import fs from 'node:fs';
+let source=fs.readFileSync('scripts/test-personal-upgrade.mjs','utf8');
+source=source.replace("await db.prepare('UPDATE users SET email=? WHERE id=?')",`const imageBytes=await readFile('public/wordbook-background.png');
+const avatarResponse=await call('/personal','alice','PUT',{avatar:'data:image/png;base64,'+imageBytes.toString('base64')});if(avatarResponse.status!==200)console.log((await avatarResponse.clone().text()).slice(0,1200));assert.equal(avatarResponse.status,200);
+assert.ok((await(await call('/personal','alice')).json()).user.avatar_url.startsWith('data:image/png;base64,'));
+assert.equal((await call('/personal','alice','PUT',{avatar:''})).status,200);
+r=await call('/uploads','alice','POST',info('c2',4));const actualId=(await r.json()).uploadId;
+assert.equal((await mf.dispatchFetch('http://localhost/part/'+actualId,{method:'PUT',headers:{cookie:'cabinlink_session=alice','content-length':'4'},body:new Uint8Array([1,2,3,4])})).status,200);
+assert.equal((await call('/complete/'+actualId,'bob','POST')).status,403);
+assert.equal((await call('/complete/'+actualId,'alice','POST')).status,200);
+assert.equal((await db.prepare('SELECT uploader_user_id FROM files WHERE original_name=?').bind('test.bin').first()).uploader_user_id,'alice');
+assert.equal((await call('/personal','alice','PUT',{currentPassword:'wrong',password:'NewPass123'})).status,403);
+assert.equal((await call('/personal','alice','PUT',{currentPassword:'old123',password:'NewPass123'})).status,200);
+assert.equal((await call('/personal','alice')).status,401);
+assert.equal((await call('/login',null,'POST',{username:'alice',password:'NewPass123'})).status,200);
+assert.equal((await call('/login',null,'POST',{username:'alice',password:'old123'})).status,401);
+console.log('PASS: actual PNG avatar save/reset; valid multipart upload and owner recording; completion isolation; password change and session revocation.');
+await db.prepare('UPDATE users SET email=? WHERE id=?')`);
+// Recreate the short-lived fixture session after testing password revocation.
+source=source.replace("await db.prepare('UPDATE users SET email=? WHERE id=?').bind",`await db.prepare('INSERT INTO sessions(id,user_id,token_hash,expires_at,created_at) VALUES(?,?,?,?,?)').bind('restored','alice',createHash('sha256').update('alice').digest('hex'),'2099-01-01',stamp).run();
+await db.prepare('UPDATE users SET email=? WHERE id=?').bind`);
+fs.writeFileSync('output/test-upgrade-extra.mjs',source);

@@ -1,0 +1,8 @@
+[     512ms] [ERROR] [vinext] RSC prefetch setup error: TypeError: ne is not a function
+    at http://43.143.130.165/_next/static/chunks/link-C99vSqYi.js:2:4303 @ http://43.143.130.165/_next/static/chunks/link-C99vSqYi.js:1
+[     512ms] [ERROR] [vinext] RSC prefetch setup error: TypeError: ne is not a function
+    at http://43.143.130.165/_next/static/chunks/link-C99vSqYi.js:2:4303 @ http://43.143.130.165/_next/static/chunks/link-C99vSqYi.js:1
+[     534ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://43.143.130.165/api/admin?q=&page=1:0
+[     552ms] [ERROR] [vinext] RSC prefetch setup error: TypeError: ne is not a function
+    at http://43.143.130.165/_next/static/chunks/link-C99vSqYi.js:2:4303 @ http://43.143.130.165/_next/static/chunks/link-C99vSqYi.js:1
+[  325601ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://43.143.130.165/api/admin?q=&page=1:0

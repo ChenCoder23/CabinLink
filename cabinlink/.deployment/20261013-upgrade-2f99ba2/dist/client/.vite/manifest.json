@@ -1,0 +1,291 @@
+{
+  "_archive-YvmdzwuN.js": {
+    "file": "_next/static/chunks/archive-YvmdzwuN.js",
+    "name": "archive",
+    "imports": [
+      "_createLucideIcon-DRbKzcQ3.js"
+    ]
+  },
+  "_arrow-left-DJCA4YD9.js": {
+    "file": "_next/static/chunks/arrow-left-DJCA4YD9.js",
+    "name": "arrow-left",
+    "imports": [
+      "_createLucideIcon-DRbKzcQ3.js"
+    ]
+  },
+  "_cabinet-links-button-DCfscWPl.js": {
+    "file": "_next/static/chunks/cabinet-links-button-DCfscWPl.js",
+    "name": "cabinet-links-button",
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "_copy-client-ClLa0pRw.js",
+      "_createLucideIcon-DRbKzcQ3.js",
+      "_framework-D_rUT4EX.js",
+      "_dist-Cw4irEyA.js"
+    ]
+  },
+  "_cabinet-overview-Dr9Aaedl.js": {
+    "file": "_next/static/chunks/cabinet-overview-Dr9Aaedl.js",
+    "name": "cabinet-overview",
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "_createLucideIcon-DRbKzcQ3.js",
+      "_archive-YvmdzwuN.js",
+      "_loader-circle-25JSMA2e.js",
+      "_framework-D_rUT4EX.js"
+    ]
+  },
+  "_copy-client-ClLa0pRw.js": {
+    "file": "_next/static/chunks/copy-client-ClLa0pRw.js",
+    "name": "copy-client",
+    "imports": [
+      "_createLucideIcon-DRbKzcQ3.js"
+    ]
+  },
+  "_createLucideIcon-DRbKzcQ3.js": {
+    "file": "_next/static/chunks/createLucideIcon-DRbKzcQ3.js",
+    "name": "createLucideIcon",
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "_framework-D_rUT4EX.js"
+    ]
+  },
+  "_dist-Cw4irEyA.js": {
+    "file": "_next/static/chunks/dist-Cw4irEyA.js",
+    "name": "dist",
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "_framework-D_rUT4EX.js"
+    ]
+  },
+  "_framework-D_rUT4EX.js": {
+    "file": "_next/static/chunks/framework-D_rUT4EX.js",
+    "name": "framework",
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js"
+    ]
+  },
+  "_loader-circle-25JSMA2e.js": {
+    "file": "_next/static/chunks/loader-circle-25JSMA2e.js",
+    "name": "loader-circle",
+    "imports": [
+      "_createLucideIcon-DRbKzcQ3.js"
+    ]
+  },
+  "_personal-settings-RbX1C8RY.js": {
+    "file": "_next/static/chunks/personal-settings-RbX1C8RY.js",
+    "name": "personal-settings",
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "_createLucideIcon-DRbKzcQ3.js",
+      "_framework-D_rUT4EX.js"
+    ]
+  },
+  "_plus-By0CCMHV.js": {
+    "file": "_next/static/chunks/plus-By0CCMHV.js",
+    "name": "plus",
+    "imports": [
+      "_createLucideIcon-DRbKzcQ3.js"
+    ]
+  },
+  "_rolldown-runtime-C60lm6uB.js": {
+    "file": "_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "name": "rolldown-runtime"
+  },
+  "_site-settings-panel-sjOxSiSB.js": {
+    "file": "_next/static/chunks/site-settings-panel-sjOxSiSB.js",
+    "name": "site-settings-panel",
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "_framework-D_rUT4EX.js",
+      "_dist-Cw4irEyA.js"
+    ]
+  },
+  "app/admin/page.tsx": {
+    "file": "_next/static/chunks/page-Mp0Xm69x.js",
+    "name": "page",
+    "src": "app/admin/page.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "_cabinet-links-button-DCfscWPl.js",
+      "_site-settings-panel-sjOxSiSB.js",
+      "_createLucideIcon-DRbKzcQ3.js",
+      "_archive-YvmdzwuN.js",
+      "_framework-D_rUT4EX.js"
+    ],
+    "css": [
+      "_next/static/css/page.BecA8ACD.css"
+    ]
+  },
+  "app/my/page.tsx": {
+    "file": "_next/static/chunks/page-JAfErpTF.js",
+    "name": "page",
+    "src": "app/my/page.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_cabinet-overview-Dr9Aaedl.js",
+      "_arrow-left-DJCA4YD9.js",
+      "_framework-D_rUT4EX.js"
+    ]
+  },
+  "app/page.tsx": {
+    "file": "_next/static/chunks/page-BOkXFq-Y.js",
+    "name": "page",
+    "src": "app/page.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "_cabinet-overview-Dr9Aaedl.js",
+      "_personal-settings-RbX1C8RY.js",
+      "components/site-brand.tsx",
+      "_copy-client-ClLa0pRw.js",
+      "_createLucideIcon-DRbKzcQ3.js",
+      "_loader-circle-25JSMA2e.js",
+      "_plus-By0CCMHV.js",
+      "_framework-D_rUT4EX.js",
+      "_dist-Cw4irEyA.js"
+    ]
+  },
+  "app/settings/page.tsx": {
+    "file": "_next/static/chunks/page-Ddkpt6-a.js",
+    "name": "page",
+    "src": "app/settings/page.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "_personal-settings-RbX1C8RY.js",
+      "_site-settings-panel-sjOxSiSB.js",
+      "_arrow-left-DJCA4YD9.js",
+      "_loader-circle-25JSMA2e.js",
+      "_framework-D_rUT4EX.js",
+      "_dist-Cw4irEyA.js"
+    ]
+  },
+  "app/wordbook/page.tsx": {
+    "file": "_next/static/chunks/page-HXCyAn4Q.js",
+    "name": "page",
+    "src": "app/wordbook/page.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "_framework-D_rUT4EX.js"
+    ]
+  },
+  "app/workbench/page.tsx": {
+    "file": "_next/static/chunks/page-Dz4QcPBt.js",
+    "name": "page",
+    "src": "app/workbench/page.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "_framework-D_rUT4EX.js"
+    ]
+  },
+  "components/cabinet-workspace.tsx": {
+    "file": "_next/static/chunks/cabinet-workspace-ByOpuaGo.js",
+    "name": "cabinet-workspace",
+    "src": "components/cabinet-workspace.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "_cabinet-links-button-DCfscWPl.js",
+      "components/site-brand.tsx",
+      "_createLucideIcon-DRbKzcQ3.js",
+      "_archive-YvmdzwuN.js",
+      "_loader-circle-25JSMA2e.js",
+      "_plus-By0CCMHV.js",
+      "_framework-D_rUT4EX.js",
+      "_dist-Cw4irEyA.js"
+    ]
+  },
+  "components/site-brand.tsx": {
+    "file": "_next/static/chunks/site-brand-BPJkpbP7.js",
+    "name": "site-brand",
+    "src": "components/site-brand.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "_framework-D_rUT4EX.js"
+    ]
+  },
+  "components/theme-control.tsx": {
+    "file": "_next/static/chunks/theme-control-nVn-r4MA.js",
+    "name": "theme-control",
+    "src": "components/theme-control.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "_framework-D_rUT4EX.js"
+    ]
+  },
+  "components/ui/sonner.tsx": {
+    "file": "_next/static/chunks/sonner-BdbMXCEu.js",
+    "name": "sonner",
+    "src": "components/ui/sonner.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "_createLucideIcon-DRbKzcQ3.js",
+      "_loader-circle-25JSMA2e.js",
+      "_framework-D_rUT4EX.js",
+      "_dist-Cw4irEyA.js"
+    ]
+  },
+  "node_modules/vinext/dist/shims/internal/app-route-prefetch-policy.js": {
+    "file": "_next/static/chunks/app-route-prefetch-policy-D8sDMUm7.js",
+    "name": "app-route-prefetch-policy",
+    "src": "node_modules/vinext/dist/shims/internal/app-route-prefetch-policy.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "virtual:vinext-app-browser-entry"
+    ]
+  },
+  "node_modules/vinext/dist/shims/layout-segment-context.js": {
+    "file": "_next/static/chunks/layout-segment-context-1Wk2nALY.js",
+    "name": "layout-segment-context",
+    "src": "node_modules/vinext/dist/shims/layout-segment-context.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "virtual:vinext-app-browser-entry",
+      "_framework-D_rUT4EX.js"
+    ]
+  },
+  "node_modules/vinext/dist/shims/streamed-icons.js": {
+    "file": "_next/static/chunks/streamed-icons-BGoXftz2.js",
+    "name": "streamed-icons",
+    "src": "node_modules/vinext/dist/shims/streamed-icons.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "_framework-D_rUT4EX.js"
+    ]
+  },
+  "virtual:vinext-app-browser-entry": {
+    "file": "_next/static/chunks/index-Cdo-gfoW.js",
+    "name": "index",
+    "src": "virtual:vinext-app-browser-entry",
+    "isEntry": true,
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "_framework-D_rUT4EX.js"
+    ],
+    "dynamicImports": [
+      "node_modules/vinext/dist/shims/internal/app-route-prefetch-policy.js",
+      "virtual:vinext-app-browser-entry",
+      "components/cabinet-workspace.tsx",
+      "app/my/page.tsx",
+      "node_modules/vinext/dist/shims/layout-segment-context.js",
+      "components/theme-control.tsx",
+      "components/site-brand.tsx",
+      "app/page.tsx",
+      "node_modules/vinext/dist/shims/streamed-icons.js",
+      "app/wordbook/page.tsx",
+      "app/admin/page.tsx",
+      "app/settings/page.tsx",
+      "app/workbench/page.tsx",
+      "components/ui/sonner.tsx"
+    ]
+  }
+}

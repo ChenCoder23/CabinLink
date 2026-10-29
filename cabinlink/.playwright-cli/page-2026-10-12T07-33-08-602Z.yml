@@ -1,0 +1,11 @@
+- generic [active] [ref=f3e1]:
+  - main [ref=f3e2]:
+    - generic [ref=f3e3]:
+      - generic [ref=f3e4]:
+        - paragraph [ref=f3e5]: 每日积累 · 分类背诵
+        - heading "单词本" [level=1] [ref=f3e6]
+      - link "返回首页" [ref=f3e7] [cursor=pointer]:
+        - /url: /
+  - contentinfo "免责声明" [ref=f3e8]:
+    - generic [ref=f3e10]: 本项目由华北水利水电大学陈会闯开发，仅供学习和参考。
+  - region "Notifications alt+T"

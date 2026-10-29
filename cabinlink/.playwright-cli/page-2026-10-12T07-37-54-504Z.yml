@@ -1,0 +1,74 @@
+- generic [active] [ref=f3e1]:
+  - main [ref=f3e2]:
+    - generic [ref=f3e3]:
+      - generic [ref=f3e4]:
+        - paragraph [ref=f3e5]: 每日积累 · 分类背诵
+        - heading "单词本" [level=1] [ref=f3e6]
+      - link "返回首页" [ref=f3e7] [cursor=pointer]:
+        - /url: /
+    - status [ref=f3e61]: 标记已保存
+    - generic [ref=f3e11]:
+      - generic [ref=f3e12]:
+        - text: 单词分类
+        - combobox "单词分类" [ref=f3e13]:
+          - option "请选择分类"
+          - option "四级核心词" [selected]
+      - generic [ref=f3e14]:
+        - text: 每日单词日期
+        - textbox "每日单词日期" [ref=f3e15]: 2026-10-12
+      - generic [ref=f3e16]:
+        - text: 按标记筛选
+        - combobox "按标记筛选" [ref=f3e17]:
+          - option "全部标记"
+          - option "重点" [selected]
+      - generic [ref=f3e18]:
+        - text: 背诵遮蔽
+        - combobox "背诵遮蔽" [ref=f3e19]:
+          - option "遮蔽中文"
+          - option "遮蔽英文" [selected]
+          - option "全部显示"
+    - paragraph [ref=f3e20]:
+      - text: 标记筛选涵盖当前分类已发布的全部日期。 已有单词日期：
+      - button "2026-10-12" [ref=f3e21]
+    - generic [ref=f3e22]:
+      - generic [ref=f3e23]:
+        - strong [ref=f3e24]: 我的标记
+        - textbox "标记名称" [ref=f3e25]:
+          - /placeholder: 例如：重点、易忘
+        - textbox "标记颜色" [ref=f3e26]: "#ff0000"
+        - button "保存标记" [ref=f3e27]
+      - paragraph [ref=f3e28]: 同名标记会更新颜色。标记仅保存在你的账号中。
+      - generic [ref=f3e29]:
+        - generic [ref=f3e30]:
+          - checkbox "全选" [ref=f3e31]
+          - text: 全选
+        - generic [ref=f3e32]: 已选 0 个
+        - combobox "批量标记" [ref=f3e33]:
+          - option "选择标记"
+          - option "重点" [selected]
+        - button "一键添加标记" [disabled] [ref=f3e34]
+        - button "移除所选标记" [disabled] [ref=f3e35]
+    - generic [ref=f3e36]:
+      - heading "标记单词 · 2 个" [level=2] [ref=f3e65]
+      - button "重新遮蔽" [ref=f3e38]
+    - generic [ref=f3e39]:
+      - article [ref=f3e40]:
+        - generic [ref=f3e41]:
+          - checkbox "选择 apple" [ref=f3e42]
+          - generic [ref=f3e43]:
+            - generic [ref=f3e44]:
+              - button "点击显示英文" [ref=f3e57]
+              - button "苹果" [ref=f3e56]
+            - generic [ref=f3e62]: 重点
+            - paragraph [ref=f3e47]: 单词日期 2026-10-12 · 管理员上传于 2026/10/12 15:32:54
+      - article [ref=f3e48]:
+        - generic [ref=f3e49]:
+          - checkbox "选择 learn" [ref=f3e50]
+          - generic [ref=f3e51]:
+            - generic [ref=f3e52]:
+              - button "点击显示英文" [ref=f3e58]
+              - button "学习" [ref=f3e59]
+            - paragraph [ref=f3e55]: 单词日期 2026-10-12 · 管理员上传于 2026/10/12 15:32:54
+  - contentinfo "免责声明" [ref=f3e8]:
+    - generic [ref=f3e10]: 本项目由华北水利水电大学陈会闯开发，仅供学习和参考。
+  - region "Notifications alt+T"

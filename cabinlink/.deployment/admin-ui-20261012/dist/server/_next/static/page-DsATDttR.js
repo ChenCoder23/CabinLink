@@ -1,0 +1,1 @@
+import{t as e}from"./framework~index~page~layout~page~page~app-page-cache-render~app-page-cache~app-route-handle~mgm2ah13-C4RkjBhU.js";import{t}from"./cabinet-workspace-CE7Z9A3N.js";var n=e();async function r({params:e}){let{id:r}=await e;return(0,n.jsx)(t,{ownerCabinetId:r})}export{r as default};

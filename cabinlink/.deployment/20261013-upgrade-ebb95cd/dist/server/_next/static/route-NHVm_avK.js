@@ -1,0 +1,1 @@
+import{t as e}from"./word-scheduler-IuQdjGom.js";import{env as t}from"cloudflare:workers";async function n(n){let r=t.WORD_SCHEDULER_SECRET;return!r||n.headers.get(`authorization`)!==`Bearer ${r}`?new Response(null,{status:404}):Response.json(await e(),{headers:{"Cache-Control":`no-store`}})}export{n as POST};

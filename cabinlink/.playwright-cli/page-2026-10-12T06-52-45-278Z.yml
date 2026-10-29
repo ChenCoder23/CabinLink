@@ -1,0 +1,43 @@
+- generic [active] [ref=f1e1]:
+  - main [ref=f1e2]:
+    - complementary [ref=f1e3]:
+      - link "柜联 ADMIN CONSOLE" [ref=f1e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f1e9]:
+          - text: 柜联
+          - generic [ref=f1e10]: ADMIN CONSOLE
+      - generic [ref=f1e11]: 工作空间
+      - navigation "管理后台功能" [ref=f1e12]:
+        - link "单词本管理" [ref=f1e13] [cursor=pointer]:
+          - /url: "#wordbook"
+        - link "数据概览" [ref=f1e20] [cursor=pointer]:
+          - /url: "#overview"
+        - link "用户管理" [ref=f1e27] [cursor=pointer]:
+          - /url: "#users"
+        - link "智能柜管理" [ref=f1e34] [cursor=pointer]:
+          - /url: "#cabinets"
+        - link "操作日志" [ref=f1e39] [cursor=pointer]:
+          - /url: "#logs"
+        - link "网站设置" [ref=f1e44] [cursor=pointer]:
+          - /url: "#settings"
+      - generic [ref=f1e53]:
+        - text: 管理员工作台
+        - generic [ref=f1e54]: 安全管理 · 高效协作
+    - generic [ref=f1e55]:
+      - generic [ref=f1e56]:
+        - generic [ref=f1e57]:
+          - text: 管理后台
+          - strong [ref=f1e60]: 单词本管理
+        - link "返回网站" [ref=f1e61] [cursor=pointer]:
+          - /url: /
+      - generic [ref=f1e65]:
+        - generic [ref=f1e66]:
+          - generic [ref=f1e67]:
+            - paragraph [ref=f1e68]: CABINLINK / WORDBOOK
+            - heading "单词本管理" [level=1] [ref=f1e69]
+            - paragraph [ref=f1e70]: 创建分类、导入 Excel 并发布每日单词
+          - button "正在刷新" [disabled] [ref=f1e71]
+        - paragraph [ref=f1e77]: 正在读取…
+  - contentinfo "免责声明" [ref=f1e78]:
+    - generic [ref=f1e80]: 本项目由华北水利水电大学陈会闯开发，仅供学习和参考。
+  - region "Notifications alt+T"

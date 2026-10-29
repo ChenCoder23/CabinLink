@@ -1,0 +1,39 @@
+- generic [active] [ref=f4e1]:
+  - main [ref=f4e2]:
+    - complementary [ref=f4e3]:
+      - link "柜联 ADMIN CONSOLE" [ref=f4e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f4e9]:
+          - text: 柜联
+          - generic [ref=f4e10]: ADMIN CONSOLE
+      - generic [ref=f4e11]: 工作空间
+      - navigation "管理后台功能" [ref=f4e12]:
+        - link "数据概览" [ref=f4e13] [cursor=pointer]:
+          - /url: "#overview"
+        - link "用户管理" [ref=f4e22] [cursor=pointer]:
+          - /url: "#users"
+        - link "智能柜管理" [ref=f4e29] [cursor=pointer]:
+          - /url: "#cabinets"
+        - link "操作日志" [ref=f4e34] [cursor=pointer]:
+          - /url: "#logs"
+        - link "网站设置" [ref=f4e39] [cursor=pointer]:
+          - /url: "#settings"
+      - generic [ref=f4e48]:
+        - text: 管理员工作台
+        - generic [ref=f4e49]: 安全管理 · 高效协作
+    - generic [ref=f4e50]:
+      - generic [ref=f4e51]:
+        - generic [ref=f4e52]:
+          - text: 管理后台
+          - strong [ref=f4e55]: 数据概览
+        - link "返回网站" [ref=f4e56] [cursor=pointer]:
+          - /url: /
+      - generic [ref=f4e61]:
+        - generic [ref=f4e62]:
+          - paragraph [ref=f4e63]: CABINLINK / OVERVIEW
+          - heading "数据概览" [level=1] [ref=f4e64]
+          - paragraph [ref=f4e65]: 查看网站运行与存储使用情况
+        - button "刷新数据" [ref=f4e66] [cursor=pointer]
+  - contentinfo "免责声明" [ref=f4e72]:
+    - generic [ref=f4e74]: 本项目由华北水利水电大学陈会闯开发，仅供学习和参考。
+  - region "Notifications alt+T"

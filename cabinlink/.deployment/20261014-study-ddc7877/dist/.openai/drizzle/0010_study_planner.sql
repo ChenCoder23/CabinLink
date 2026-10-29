@@ -1,0 +1,14 @@
+CREATE TABLE study_settings (user_id TEXT PRIMARY KEY REFERENCES users(id), config_json TEXT NOT NULL, revision INTEGER NOT NULL DEFAULT 0, updated_at TEXT NOT NULL);
+CREATE TABLE study_courses (id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id), label TEXT NOT NULL, source_kind TEXT NOT NULL, source_json TEXT NOT NULL, nodes_json TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'draft', attachment_key TEXT NOT NULL DEFAULT '', source_text TEXT NOT NULL DEFAULT '', created_at TEXT NOT NULL);
+CREATE INDEX study_courses_user ON study_courses(user_id,status);
+CREATE UNIQUE INDEX study_courses_active ON study_courses(user_id) WHERE status='active';
+CREATE TABLE study_progress (user_id TEXT NOT NULL REFERENCES users(id), node_id TEXT NOT NULL, state_json TEXT NOT NULL, updated_at TEXT NOT NULL, PRIMARY KEY(user_id,node_id));
+CREATE TABLE study_plans (user_id TEXT NOT NULL REFERENCES users(id), study_date TEXT NOT NULL, course_id TEXT NOT NULL, tasks_json TEXT NOT NULL, revision INTEGER NOT NULL DEFAULT 0, generated_at TEXT NOT NULL, reason TEXT NOT NULL, PRIMARY KEY(user_id,study_date));
+CREATE TABLE study_records (id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id), task_id TEXT NOT NULL, node_id TEXT NOT NULL, study_date TEXT NOT NULL, event TEXT NOT NULL, minutes INTEGER NOT NULL DEFAULT 0, feedback TEXT NOT NULL DEFAULT '', notes TEXT NOT NULL DEFAULT '', created_at TEXT NOT NULL);
+CREATE INDEX study_records_user ON study_records(user_id,created_at);
+CREATE TABLE study_proposals (id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id), payload_json TEXT NOT NULL, before_json TEXT NOT NULL, after_revisions_json TEXT NOT NULL DEFAULT '{}', status TEXT NOT NULL DEFAULT 'pending', apply_token TEXT NOT NULL DEFAULT '', created_at TEXT NOT NULL, applied_at TEXT NOT NULL DEFAULT '');
+CREATE INDEX study_proposals_user ON study_proposals(user_id,status,created_at);
+CREATE TABLE study_agent_config (user_id TEXT PRIMARY KEY REFERENCES users(id), provider TEXT NOT NULL, base_url TEXT NOT NULL, model TEXT NOT NULL, key_cipher TEXT NOT NULL DEFAULT '', key_hint TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'unconfigured', tested_at TEXT NOT NULL DEFAULT '');
+CREATE TABLE study_messages (id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id), role TEXT NOT NULL, content TEXT NOT NULL, proposal_id TEXT NOT NULL DEFAULT '', mode TEXT NOT NULL, created_at TEXT NOT NULL);
+CREATE INDEX study_messages_user ON study_messages(user_id,created_at);
+CREATE TABLE workbench_profile_history (id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id), introduction TEXT NOT NULL, created_at TEXT NOT NULL);

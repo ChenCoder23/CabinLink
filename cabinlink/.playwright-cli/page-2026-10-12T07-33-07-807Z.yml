@@ -1,0 +1,16 @@
+- generic [ref=f2e3]:
+  - generic [ref=f2e6]:
+    - heading "您被禁止访问互联网" [level=1] [ref=f2e7]
+    - paragraph [ref=f2e8]: 防火墙或防病毒软件可能已阻止您连接到网络。
+    - generic [ref=f2e9]:
+      - paragraph [ref=f2e10]: 请试试以下办法：
+      - list [ref=f2e11]:
+        - listitem [ref=f2e12]: 检查网络连接
+        - listitem [ref=f2e13]:
+          - link "检查防火墙和防病毒配置" [ref=f2e14] [cursor=pointer]:
+            - /url: "#buttons"
+        - listitem [ref=f2e15]:
+          - link "运行 Windows 网络诊断" [ref=f2e16] [cursor=pointer]:
+            - /url: javascript:diagnoseErrors()
+    - generic [ref=f2e17]: ERR_NETWORK_ACCESS_DENIED
+  - button "详情" [ref=f2e19] [cursor=pointer]
